@@ -1,8 +1,8 @@
 ﻿using NotificationService.Models;
 
-namespace NotificationService.Data
+namespace NotificationService.Repositories
 {
-    public interface INotificationRepo
+    public interface INotificationRepository
     {
         bool SaveChanges();
         IEnumerable<Notification> GetAllNotificationsForUser(int userID);

@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NotificationService.Data;
 using NotificationService.Models;
 
-namespace NotificationService.Data
+namespace NotificationService.Repositories
 {
-    public class NotificationRepo : INotificationRepo
+    public class NotificationRepository : INotificationRepository
     {
         private readonly AppDbContext _context;
 
-        public NotificationRepo(AppDbContext context)
+        public NotificationRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -35,7 +36,7 @@ namespace NotificationService.Data
 
         public bool SaveChanges()
         {
-            return (_context.SaveChanges() >= 0);
+            return _context.SaveChanges() >= 0;
         }
     }
 
