@@ -5,6 +5,7 @@ using NotificationService.Dtos;
 using NotificationService.Models;
 using NotificationService.Services;
 
+
 namespace NotificationService.Controllers
 {
     [Route("notifications/[controller]")]
@@ -27,19 +28,20 @@ namespace NotificationService.Controllers
         [HttpGet("foruser/{userID}", Name = "GetAllNotificationsForUser")]
         public ActionResult<IEnumerable<NotificationReadDto>> GetNotifications(int userID)
         {
-
+            throw new NotImplementedException();
         }
 
         [HttpGet("get/{id}", Name = "GetNotificationById")]
         public ActionResult<NotificationReadDto> GetPlatformById(int id)
         {
+            throw new NotImplementedException();
         }
 
         // TODO : дописать метод
         [HttpPost]
         public async Task<ActionResult<NotificationReadDto>> CreateNotifications(NotificationCreateDto notificationCreateDto)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

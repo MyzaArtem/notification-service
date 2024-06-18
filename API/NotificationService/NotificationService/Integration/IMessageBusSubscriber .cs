@@ -3,9 +3,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NotificationService.AsyncDataService
+namespace NotificationService.Integration
 {
-    public abstract class IMessageBusSubscriber : BackgroundService, IDisposable
+    /*public abstract class IMessageBusSubscriber : BackgroundService, IDisposable
     {
         private readonly CancellationTokenSource _stoppingCts = new CancellationTokenSource();
 
@@ -38,5 +38,5 @@ namespace NotificationService.AsyncDataService
             }
             base.Dispose(disposing);
         }
-    }
+    }*/
 }

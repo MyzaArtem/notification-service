@@ -3,10 +3,11 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Threading.Channels;
 using System.Text;
+using NotificationService.Integration;
 
-namespace NotificationService.AsyncDataService
+namespace NotificationService.Integration
 {
-    public class RabbitMqSubscriber : BackgroundService, IMessageBusSubscriber
+    /*public class RabbitMqSubscriber : BackgroundService, IMessageBusSubscriber
     {
         public void Initialize()
         {
@@ -18,9 +19,6 @@ namespace NotificationService.AsyncDataService
             throw new NotImplementedException();
         }
 
-        Task IMessageBusSubscriber.ExecuteAsync(CancellationToken stoppingToken)
-        {
-            throw new NotImplementedException();
-        }
-    }
+        Task IMessageBusSubscriber.ExecuteAsync(CancellationToken stoppingToken) => throw new NotImplementedException();
+    }*/
 }
