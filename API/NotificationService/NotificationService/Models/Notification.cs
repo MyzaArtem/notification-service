@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NotificationService.Models
 {
@@ -10,18 +11,22 @@ namespace NotificationService.Models
 
         [Required]
         public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public User User { get; set; }
 
         [Required]
         public int ServiceId { get; set; }
+        [ForeignKey("ServiceId")]
         public Service Service { get; set; }
 
         [Required]
         public int NotificationTypeId { get; set; }
+        [ForeignKey("NotificationTypeId")]
         public NotificationType NotificationType { get; set; }
 
         [Required]
         public int NotificationCategoryId { get; set; }
+        [ForeignKey("NotificationCategoryId")]
         public NotificationCategory NotificationCategory { get; set; }
 
         [Required]
