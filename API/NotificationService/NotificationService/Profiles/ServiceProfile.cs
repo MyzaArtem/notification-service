@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using NotificationService.Models;
+using NotificationService.Dtos;
 
 namespace NotificationService.Profiles
 {

@@ -8,10 +8,6 @@ namespace NotificationService.Profiles
     {
         public NotificationsProfile()
         {
-            CreateMap<NotificationCategory, NotificationCategoryReadDto>();
-            CreateMap<NotificationCategoryCreateDto, NotificationCategory>();
-            CreateMap<NotificationCategoryUpdateDto, NotificationCategory>();
-
             CreateMap<Notification, NotificationReadDto>();
             CreateMap<NotificationCreateDto, Notification>();
             CreateMap<NotificationUpdateDto, Notification>();

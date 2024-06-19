@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using NotificationService.Data;
 using NotificationService.Repositories;
 using NotificationService.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NotificationService.Configuration
 {
@@ -16,20 +17,21 @@ namespace NotificationService.Configuration
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Register the AppDbContext with an in-memory database
+            string? connection = Configuration.GetConnectionString("DefaultConnection");
+            if (connection == null)
+            {
+                Console.WriteLine("Connection is null");
+                return;
+            }
             services.AddDbContext<AppDbContext>(opt =>
-                opt.UseInMemoryDatabase("InMem"));
+                opt.UseNpgsql(connection));
 
-            // Register the NotificationRepository
             services.AddScoped<INotificationRepository, NotificationRepository>();
 
-            // Add controllers
             services.AddControllers();
 
-            // Register AutoMapper and specify assemblies to scan
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            // Add Swagger for API documentation
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
@@ -57,7 +59,6 @@ namespace NotificationService.Configuration
                 endpoints.MapControllers();
             });
 
-            //PrepDb.PrepPopulation(app);
         }
     }
 }
