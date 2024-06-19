@@ -1,6 +1,6 @@
 ﻿namespace NotificationService.Dtos
 {
-    public class NotificationCreateDto
+    public class NotificationUpdateDto
     {
         public int UserId { get; set; }
         public int ServiceId { get; set; }
@@ -11,5 +11,4 @@
         public DateTime CreatedAt { get; set; }
         public bool IsRead { get; set; }
     }
-
 }

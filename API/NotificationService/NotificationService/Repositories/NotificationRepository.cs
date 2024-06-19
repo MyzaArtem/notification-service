@@ -15,19 +15,11 @@ namespace NotificationService.Repositories
 
         public async Task CreateNotificationAsync(Notification notification)
         {
-            if (notification == null)
-            {
-                throw new ArgumentNullException(nameof(notification));
-            }
             await _context.Notifications.AddAsync(notification);
         }
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId)
         {
-            if (userId <= 0)
-            {
-                throw new ArgumentException("Invalid user ID", nameof(userId));
-            }
             return await _context.Notifications
                 .Where(n => n.UserId == userId)
                 .ToListAsync();
