@@ -8,6 +8,7 @@ nupkg/
 # Visual Studio Code
 .vscode/
 
+# Docker postgres database
 .containers/
 
 # Rider

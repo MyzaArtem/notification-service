@@ -2,22 +2,14 @@
 {
     public class NotificationCreateDto
     {
-        public uint Id { get; set; }
-
-        public string UserId { get; set; }
-
-        public string ServiceId { get; set; }
-
-        public string NotificationTypeId { get; set; }
-
-        public string NotificationCategoryId { get; set; }
-
+        public int UserId { get; set; }
+        public int ServiceId { get; set; }
+        public int NotificationTypeId { get; set; }
+        public int NotificationCategoryId { get; set; }
         public string Title { get; set; }
-
         public string Message { get; set; }
-
         public DateTime CreatedAt { get; set; }
-
         public bool IsRead { get; set; }
     }
+
 }

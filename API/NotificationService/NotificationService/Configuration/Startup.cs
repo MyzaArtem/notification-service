@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NotificationService.Data;
 using NotificationService.Repositories;
 using NotificationService.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NotificationService.Configuration
 {
@@ -16,20 +18,29 @@ namespace NotificationService.Configuration
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Register the AppDbContext with an in-memory database
+            string? connection = Configuration.GetConnectionString("DefaultConnection");
+            if (connection == null)
+            {
+                throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
+            }
+            services.AddLogging();
+
             services.AddDbContext<AppDbContext>(opt =>
-                opt.UseInMemoryDatabase("InMem"));
+                opt.UseNpgsql(connection));
 
-            // Register the NotificationRepository
+            services.AddScoped<INotificationService, NotificationServiceImpl>();
+
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationCategoryRepository, NotificationCategoryRepository>();
+            services.AddScoped<INotificationSettingsRepository, NotificationSettingsRepository>();
+            services.AddScoped<INotificationTypeRepository, NotificationTypeRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
 
-            // Add controllers
             services.AddControllers();
 
-            // Register AutoMapper and specify assemblies to scan
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            // Add Swagger for API documentation
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
@@ -37,7 +48,7 @@ namespace NotificationService.Configuration
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -45,8 +56,6 @@ namespace NotificationService.Configuration
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommandsService v1"));
             }
-
-            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -56,8 +65,20 @@ namespace NotificationService.Configuration
             {
                 endpoints.MapControllers();
             });
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
 
-            //PrepDb.PrepPopulation(app);
+                await PrepareDatebase.Prepare(
+                    serviceScope.ServiceProvider.GetService<INotificationRepository>(),
+                    serviceScope.ServiceProvider.GetService<INotificationCategoryRepository>(),
+                    serviceScope.ServiceProvider.GetService<INotificationSettingsRepository>(),
+                    serviceScope.ServiceProvider.GetService<INotificationTypeRepository>(),
+                    serviceScope.ServiceProvider.GetService<IUserRepository>(),
+                    serviceScope.ServiceProvider.GetService<IServiceRepository>()
+                );
+            }
         }
     }
 }

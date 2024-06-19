@@ -8,11 +8,11 @@ namespace NotificationService.Profiles
     {
         public NotificationsProfile()
         {
-            // Source -> Target
             CreateMap<Notification, NotificationReadDto>();
             CreateMap<NotificationCreateDto, Notification>();
-
+            CreateMap<NotificationUpdateDto, Notification>();
         }
+
     }
 
 }

@@ -15,7 +15,6 @@ namespace NotificationService.Models
         [Required]
         public string TypeName { get; set; }
 
-        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     }
 
 }

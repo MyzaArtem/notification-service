@@ -13,7 +13,6 @@ namespace NotificationService.Models
 
         public string Description { get; set; }
 
-        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     }
 
 }
