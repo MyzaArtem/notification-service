@@ -1,4 +1,5 @@
-﻿using NotificationService.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using NotificationService.Models;
 using NotificationService.Repositories;
 
 namespace NotificationService.Services
@@ -24,10 +25,20 @@ namespace NotificationService.Services
 
         public async Task<Notification> GetNotificationByIdAsync(int id)
         {
-            return await _repository.GetNotificationByIdAsync(id);
+            if (id <= 0)
+            {
+                throw new ArgumentException("Invalid ID", nameof(id));
+            }
+
+            var notification = await _repository.GetNotificationByIdAsync(id);
+            if (notification == null)
+            {
+                throw new InvalidOperationException($"Notification with id {id} not found.");
+            }
+            return notification;
         }
 
-        public async Task CreateNotificationAsync(Notification notification)
+        public async Task CreateNotificationAsync(Notification? notification)
         {
             if (notification == null)
             {
@@ -38,10 +49,44 @@ namespace NotificationService.Services
             await _repository.SaveChangesAsync();
         }
 
-        public async Task<bool> SaveChangesAsync()
+        public async Task UpdateNotificationAsync(Notification? notification)
         {
-            return await _repository.SaveChangesAsync();
+            if (notification == null)
+            {
+                throw new ArgumentNullException(nameof(notification));
+            }
+
+            _repository.UpdateNotificationAsync(notification);
+
+            try
+            {
+                await _repository.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new DbUpdateConcurrencyException("Error when trying to save update.\r\n");
+            }
         }
+
+        public async Task DeleteNotificationAsync(Notification? notification)
+        {
+            if (notification == null)
+            {
+                throw new ArgumentNullException(nameof(notification));
+            }
+
+            _repository.DeleteNotificationAsync(notification);
+
+            try
+            {
+                await _repository.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new DbUpdateConcurrencyException("Error when trying to delete.\r\n");
+            }
+        }
+
     }
 
 }

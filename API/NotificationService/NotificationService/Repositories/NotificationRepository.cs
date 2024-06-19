@@ -25,7 +25,7 @@ namespace NotificationService.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Notification> GetNotificationByIdAsync(int id)
+        public async Task<Notification?> GetNotificationByIdAsync(int id)
         {
             return await _context.Notifications.FirstOrDefaultAsync(p => p.Id == id);
         }
@@ -33,6 +33,17 @@ namespace NotificationService.Repositories
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() >= 0;
+        }
+
+        public void UpdateNotificationAsync(Notification notification)
+        {
+            // Помечаем уведомление как измененное в контексте EF Core
+            _context.Entry(notification).State = EntityState.Modified;
+        }
+
+        public void DeleteNotificationAsync(Notification notification)
+        {
+            _context.Notifications.Remove(notification);
         }
     }
 }

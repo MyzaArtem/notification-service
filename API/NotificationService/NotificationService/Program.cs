@@ -6,6 +6,12 @@ using NotificationService.Repositories;
 
 namespace NotificationService
 {
+    //  миграции
+    // dotnet ef database update 
+    //  докер ексек
+    // psql -U postgres -d notifications 
+    //  узнать какие таблички
+    // \dt
     public class Program
     {
         public static void Main(string[] args)

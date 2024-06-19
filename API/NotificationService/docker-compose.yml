@@ -31,6 +31,9 @@ services:
       - "5432:5432"
     networks:
       - notification_network
+    entrypoint: 
+      /bin/sh -c "rm -rf /var/lib/postgresql/data/* && docker-entrypoint.sh postgres"
+
 
 networks:
   notification_network:
