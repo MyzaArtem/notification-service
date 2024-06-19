@@ -24,24 +24,40 @@ namespace NotificationService.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet("foruser/{userID}", Name = "GetAllNotificationsForUser")]
-        public ActionResult<IEnumerable<NotificationReadDto>> GetNotifications(int userID)
+        public async Task<ActionResult<IEnumerable<NotificationReadDto>>> GetNotifications(int userID)
         {
-            throw new NotImplementedException();
+            var notifications = await _service.GetAllNotificationsForUserAsync(userID);
+            if (notifications == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<NotificationReadDto>>(notifications));
         }
 
         [HttpGet("get/{id}", Name = "GetNotificationById")]
-        public ActionResult<NotificationReadDto> GetPlatformById(int id)
+        public async Task<ActionResult<NotificationReadDto>> GetNotificationById(int id)
         {
-            throw new NotImplementedException();
+            var notification = await _service.GetNotificationByIdAsync(id);
+            if (notification == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<NotificationReadDto>(notification));
         }
 
-        // TODO : дописать метод
         [HttpPost]
         public async Task<ActionResult<NotificationReadDto>> CreateNotifications(NotificationCreateDto notificationCreateDto)
         {
-            throw new NotImplementedException();
+            var notificationModel = _mapper.Map<Notification>(notificationCreateDto);
+            await _service.CreateNotificationAsync(notificationModel);
+            await _service.SaveChangesAsync();
+
+            var notificationReadDto = _mapper.Map<NotificationReadDto>(notificationModel);
+
+            return CreatedAtRoute(nameof(GetNotificationById), new { id = notificationReadDto.Id }, notificationReadDto);
         }
     }
 }

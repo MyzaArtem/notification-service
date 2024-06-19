@@ -4,9 +4,9 @@ namespace NotificationService.Services
 {
     public interface INotificationService
     {
-        bool SaveChanges();
-        IEnumerable<Notification> GetAllNotificationsForUser(int userID);
-        Notification GetNotificationById(int id);
-        void CreateNotification(Notification notification);
+        Task<bool> SaveChangesAsync();
+        Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId);
+        Task<Notification> GetNotificationByIdAsync(int id);
+        Task CreateNotificationAsync(Notification notification);
     }
 }

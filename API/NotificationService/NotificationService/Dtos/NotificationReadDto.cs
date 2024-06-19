@@ -3,7 +3,6 @@
 
     public class NotificationReadDto
     {
-
         public uint Id { get; set; }
 
         /*public string UserId { get; set; }

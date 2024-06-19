@@ -6,9 +6,16 @@ namespace NotificationService.Models
     {
         [Key]
         [Required]
-        public uint Id { get; set; }
-        public string ServiceId { get; set; }
+        public int Id { get; set; }
+
+        [Required]
+        public int ServiceId { get; set; }
+        public Service Service { get; set; }
+
+        [Required]
         public string TypeName { get; set; }
 
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     }
+
 }

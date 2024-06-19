@@ -6,19 +6,23 @@ namespace NotificationService.Models
     {
         [Key]
         [Required]
-        public uint Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         [Required]
-        public string ServiceId { get; set; }
+        public int ServiceId { get; set; }
+        public Service Service { get; set; }
 
         [Required]
-        public string NotificationTypeId { get; set; }
+        public int NotificationTypeId { get; set; }
+        public NotificationType NotificationType { get; set; }
 
         [Required]
-        public string NotificationCategoryId { get; set; }
+        public int NotificationCategoryId { get; set; }
+        public NotificationCategory NotificationCategory { get; set; }
 
         [Required]
         public string Title { get; set; }
@@ -31,6 +35,6 @@ namespace NotificationService.Models
 
         [Required]
         public bool IsRead { get; set; }
-
     }
+
 }

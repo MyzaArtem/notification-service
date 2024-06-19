@@ -13,31 +13,34 @@ namespace NotificationService.Repositories
             _context = context;
         }
 
-        public void CreateNotification(Notification notification)
+        public async Task CreateNotificationAsync(Notification notification)
         {
             if (notification == null)
             {
                 throw new ArgumentNullException(nameof(notification));
             }
-
-            _context.Platforms.Add(notification);
+            await _context.Notifications.AddAsync(notification);
         }
 
-        public IEnumerable<Notification> GetAllNotificationsForUser(int userID)
+        public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId)
         {
-            // TODO : Реализовать метод
-            throw new ArgumentNullException(nameof(userID));
+            if (userId <= 0)
+            {
+                throw new ArgumentException("Invalid user ID", nameof(userId));
+            }
+            return await _context.Notifications
+                .Where(n => n.UserId == userId)
+                .ToListAsync();
         }
 
-        public Notification GetNotificationById(int id)
+        public async Task<Notification> GetNotificationByIdAsync(int id)
         {
-            return _context.Platforms.FirstOrDefault(p => p.Id == id);
+            return await _context.Notifications.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChangesAsync()
         {
-            return _context.SaveChanges() >= 0;
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
-
 }

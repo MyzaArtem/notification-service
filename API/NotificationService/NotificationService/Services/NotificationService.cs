@@ -1,29 +1,37 @@
 ﻿using NotificationService.Models;
+using NotificationService.Repositories;
 
 namespace NotificationService.Services
 {
     public class NotificationService : INotificationService
     {
-        public NotificationService() { }
+        private readonly INotificationRepository _repository;
 
-        public void CreateNotification(Notification notification)
+        public NotificationService(INotificationRepository repository)
         {
-            throw new NotImplementedException();
+            _repository = repository;
         }
 
-        public IEnumerable<Notification> GetAllNotificationsForUser(int userID)
+        public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId)
         {
-            throw new NotImplementedException();
+            return await _repository.GetAllNotificationsForUserAsync(userId);
         }
 
-        public Notification GetNotificationById(int id)
+        public async Task<Notification> GetNotificationByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetNotificationByIdAsync(id);
         }
 
-        public bool SaveChanges()
+        public async Task CreateNotificationAsync(Notification notification)
         {
-            throw new NotImplementedException();
+            await _repository.CreateNotificationAsync(notification);
+            await _repository.SaveChangesAsync();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _repository.SaveChangesAsync();
         }
     }
+
 }
