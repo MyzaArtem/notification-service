@@ -296,4 +296,8 @@ export class AppComponent implements OnInit, OnDestroy {
     window.location.reload();
     this.tokenStore.deleteToken();
   };
+
+  public openNotificationWindow() {
+    
+  }
 }

@@ -13,7 +13,7 @@
     <kendo-menu-item text="Name">
       <ng-template kendoMenuItemTemplate let-item="item">
         <div class="menu-picture" [style.background-image]="photoUrl"></div>
-        <h2 class="person-full-name">{{person.fullName}}</h2>
+        <h2 class="person-full-name">{{person.firstName}} {{person.lastName}}</h2>
         <div class="burger-menu k-icon k-i-menu k-icon-md"></div>
       </ng-template>
       <kendo-menu-item *ngIf="isAdmin" [cssStyle]="{ color: '#42A7DD' }"  icon="user">
@@ -39,6 +39,16 @@
       </kendo-menu-item>
     </kendo-menu-item>
   </kendo-menu>
+  <button 
+    kendoButton 
+    class="notification-btn"
+    icon="bell"
+    rounded="large"
+    fillMode="flat"
+    themeColor="primary"
+    (click)="openNotificationWindow()"
+  >
+  </button>
 </kendo-appbar>
 <kendo-drawer-container>
   <kendo-drawer
