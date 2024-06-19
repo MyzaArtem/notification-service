@@ -58,10 +58,10 @@ namespace NotificationService.Repositories
             return await _context.SaveChangesAsync() >= 0;
         }
 
-        public void UpdateNotificationAsync(Notification notification)
+        public void UpdateNotificationAsync(Notification existingNotification, Notification notification)
         {
             _logger.LogInformation($"Updating notification with ID: {notification.Id}");
-            _context.Entry(notification).State = EntityState.Modified;
+            _context.Entry(existingNotification).CurrentValues.SetValues(notification);
             _logger.LogInformation($"Notification with ID {notification.Id} updated successfully.");
         }
 

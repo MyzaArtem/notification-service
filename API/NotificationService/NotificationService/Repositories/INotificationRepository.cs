@@ -8,7 +8,7 @@ namespace NotificationService.Repositories
         Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId);
         Task<Notification?> GetNotificationByIdAsync(int id);
         Task CreateNotificationAsync(Notification notification);
-        void UpdateNotificationAsync(Notification notification);
+        void UpdateNotificationAsync(Notification existingNotification, Notification notification);
         void DeleteNotificationAsync(Notification notification);
     }
 

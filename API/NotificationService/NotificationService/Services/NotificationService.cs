@@ -57,7 +57,15 @@ namespace NotificationService.Services
             }
 
             await _repository.CreateNotificationAsync(notification);
-            await _repository.SaveChangesAsync();
+            try
+            {
+                await _repository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public async Task UpdateNotificationAsync(Notification? notification)
@@ -68,7 +76,9 @@ namespace NotificationService.Services
                 throw new ArgumentNullException("Invalid notification", nameof(notification));
             }
 
-            _repository.UpdateNotificationAsync(notification);
+            var existedNotification = await _repository.GetNotificationByIdAsync(notification.Id);
+
+            _repository.UpdateNotificationAsync(existedNotification, notification);
 
             try
             {
