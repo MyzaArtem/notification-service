@@ -798,7 +798,7 @@ button[themecolor="primary"] {
 /* MENU COLORS */
 .person-menu {
   position: absolute;
-  right: 1%;
+  right: 4%;
 
   .k-icon {
     .k-i-user {
@@ -1195,6 +1195,16 @@ label.info {
   .menu-title {
     width: 200px;
     color: #42A7DD;
+  }
+}
+
+.notification-btn{
+  color: #61A1FE;
+  &:hover {
+    color: #0D69FD;
+  }
+  &:focus {
+    color: #0D69FD;
   }
 }
 
