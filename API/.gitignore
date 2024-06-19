@@ -9,7 +9,7 @@ nupkg/
 .vscode/
 
 # Docker postgres database
-.container/
+.containers/
 
 # Rider
 .idea/

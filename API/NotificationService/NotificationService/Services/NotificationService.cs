@@ -6,6 +6,7 @@ namespace NotificationService.Services
 {
     public class NotificationService : INotificationService
     {
+        public const int InvalidID = 0;
         private readonly INotificationRepository _repository;
 
         public NotificationService(INotificationRepository repository)
@@ -15,7 +16,7 @@ namespace NotificationService.Services
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId)
         {
-            if (userId <= 0)
+            if (userId <= InvalidID)
             {
                 throw new ArgumentException("Invalid user ID", nameof(userId));
             }
@@ -25,7 +26,7 @@ namespace NotificationService.Services
 
         public async Task<Notification> GetNotificationByIdAsync(int id)
         {
-            if (id <= 0)
+            if (id <= InvalidID)
             {
                 throw new ArgumentException("Invalid ID", nameof(id));
             }
