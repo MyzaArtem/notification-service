@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NotificationService.Integration;
 
 namespace NotificationService.Controllers
 {
@@ -18,12 +19,14 @@ namespace NotificationService.Controllers
         private readonly INotificationService _service;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
+        private readonly IMessageBusClient _messageBusClient;
 
-        public NotificationController(INotificationService service, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(INotificationService service, IMapper mapper, ILogger<NotificationController> logger, IMessageBusClient messageBusClient)
         {
             _service = service;
             _mapper = mapper;
             _logger = logger;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet("foruser/{userId}", Name = "GetAllNotificationsForUser")]
@@ -106,6 +109,13 @@ namespace NotificationService.Controllers
                 _logger.LogError($"Internal server error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
+
+            //Send Async Message
+
+
+            //Send Sync Message
+
+
         }
 
         [HttpPut("{id}")]

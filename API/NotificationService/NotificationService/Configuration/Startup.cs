@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NotificationService.Data;
+using NotificationService.Integration;
 using NotificationService.Repositories;
 using NotificationService.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -36,6 +37,9 @@ namespace NotificationService.Configuration
             services.AddScoped<INotificationTypeRepository, NotificationTypeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+
+            services.AddSignalR();
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
             services.AddControllers();
 
