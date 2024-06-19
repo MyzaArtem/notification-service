@@ -27,6 +27,8 @@ namespace NotificationService.Configuration
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
+            services.AddScoped<INotificationService, NotificationServiceImpl>();
+
             services.AddScoped<INotificationRepository, NotificationRepository>();
 
             services.AddControllers();

@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 
 namespace NotificationService.Services
 {
-    public class NotificationService : INotificationService
+    public class NotificationServiceImpl : INotificationService
     {
         private const int InvalidID = 0;
         private readonly INotificationRepository _repository;
-        private readonly ILogger<NotificationService> _logger;
+        private readonly ILogger<NotificationServiceImpl> _logger;
 
-        public NotificationService(INotificationRepository repository, ILogger<NotificationService> logger)
+        public NotificationServiceImpl(INotificationRepository repository, ILogger<NotificationServiceImpl> logger)
         {
             _repository = repository;
             _logger = logger;
