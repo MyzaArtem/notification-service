@@ -20,9 +20,10 @@ namespace NotificationService.Configuration
             string? connection = Configuration.GetConnectionString("DefaultConnection");
             if (connection == null)
             {
-                Console.WriteLine("Connection is null");
-                return;
+                throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
             }
+            services.AddLogging();
+
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
@@ -47,8 +48,6 @@ namespace NotificationService.Configuration
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommandsService v1"));
             }
-
-            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

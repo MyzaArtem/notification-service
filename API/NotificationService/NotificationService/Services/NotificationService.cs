@@ -1,23 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NotificationService.Models;
 using NotificationService.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NotificationService.Services
 {
     public class NotificationService : INotificationService
     {
-        public const int InvalidID = 0;
+        private const int InvalidID = 0;
         private readonly INotificationRepository _repository;
+        private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(INotificationRepository repository)
+        public NotificationService(INotificationRepository repository, ILogger<NotificationService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId)
         {
             if (userId <= InvalidID)
             {
+                _logger.LogError($"Invalid user ID: {userId}");
                 throw new ArgumentException("Invalid user ID", nameof(userId));
             }
 
@@ -28,12 +35,14 @@ namespace NotificationService.Services
         {
             if (id <= InvalidID)
             {
+                _logger.LogError($"Invalid ID: {id}");
                 throw new ArgumentException("Invalid ID", nameof(id));
             }
 
             var notification = await _repository.GetNotificationByIdAsync(id);
             if (notification == null)
             {
+                _logger.LogWarning($"Notification with id {id} not found.");
                 throw new InvalidOperationException($"Notification with id {id} not found.");
             }
             return notification;
@@ -43,7 +52,8 @@ namespace NotificationService.Services
         {
             if (notification == null)
             {
-                throw new ArgumentNullException(nameof(notification));
+                _logger.LogError("Invalid notification: null");
+                throw new ArgumentNullException("Invalid notification", nameof(notification));
             }
 
             await _repository.CreateNotificationAsync(notification);
@@ -54,7 +64,8 @@ namespace NotificationService.Services
         {
             if (notification == null)
             {
-                throw new ArgumentNullException(nameof(notification));
+                _logger.LogError("Invalid notification: null");
+                throw new ArgumentNullException("Invalid notification", nameof(notification));
             }
 
             _repository.UpdateNotificationAsync(notification);
@@ -63,8 +74,9 @@ namespace NotificationService.Services
             {
                 await _repository.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                _logger.LogError(ex, "Error when trying to save update.");
                 throw new DbUpdateConcurrencyException("Error when trying to save update.\r\n");
             }
         }
@@ -73,7 +85,8 @@ namespace NotificationService.Services
         {
             if (notification == null)
             {
-                throw new ArgumentNullException(nameof(notification));
+                _logger.LogError("Invalid notification: null");
+                throw new ArgumentNullException("Invalid notification", nameof(notification));
             }
 
             _repository.DeleteNotificationAsync(notification);
@@ -82,12 +95,11 @@ namespace NotificationService.Services
             {
                 await _repository.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                _logger.LogError(ex, "Error when trying to delete.");
                 throw new DbUpdateConcurrencyException("Error when trying to delete.\r\n");
             }
         }
-
     }
-
 }

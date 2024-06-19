@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NotificationService.Dtos;
 using NotificationService.Models;
 using NotificationService.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,11 +17,13 @@ namespace NotificationService.Controllers
     {
         private readonly INotificationService _service;
         private readonly IMapper _mapper;
+        private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationService service, IMapper mapper)
+        public NotificationController(INotificationService service, IMapper mapper, ILogger<NotificationController> logger)
         {
             _service = service;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("foruser/{userId}", Name = "GetAllNotificationsForUser")]
@@ -28,9 +31,12 @@ namespace NotificationService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Fetching notifications for user with ID: {userId}");
+
                 var notifications = await _service.GetAllNotificationsForUserAsync(userId);
                 if (notifications == null)
                 {
+                    _logger.LogWarning($"Notifications not found for user with ID: {userId}");
                     return NotFound();
                 }
 
@@ -38,10 +44,12 @@ namespace NotificationService.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest("User ID is invalid: " + ex.Message);
+                _logger.LogError($"User ID is invalid: {ex.Message}");
+                return BadRequest("User ID is invalid");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Internal server error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -51,20 +59,25 @@ namespace NotificationService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Fetching notification with ID: {id}");
+
                 var notification = await _service.GetNotificationByIdAsync(id);
                 if (notification == null)
                 {
+                    _logger.LogWarning($"Notification with ID {id} not found");
                     return NotFound();
                 }
 
                 return Ok(_mapper.Map<NotificationReadDto>(notification));
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                _logger.LogError($"Concurrency error occurred while fetching notification with ID {id}: {ex.Message}");
                 return StatusCode(500, "Concurrency error occurred");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Internal server error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -74,6 +87,8 @@ namespace NotificationService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Creating new notification");
+
                 var notificationModel = _mapper.Map<Notification>(notificationCreateDto);
                 await _service.CreateNotificationAsync(notificationModel);
 
@@ -83,10 +98,12 @@ namespace NotificationService.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest("Notification is null: " + ex.Message);
+                _logger.LogError($"Notification is null: {ex.Message}");
+                return BadRequest("Notification is null");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Internal server error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -96,21 +113,26 @@ namespace NotificationService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Updating notification with ID: {id}");
+
                 var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
                 await _service.UpdateNotificationAsync(notificationModel);
 
                 return Ok();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                _logger.LogError($"Concurrency error occurred while updating notification with ID {id}: {ex.Message}");
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest("Notification is null: " + ex.Message);
+                _logger.LogError($"Notification is null: {ex.Message}");
+                return BadRequest("Notification is null");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Internal server error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -120,21 +142,31 @@ namespace NotificationService.Controllers
         {
             try
             {
+                _logger.LogInformation($"Deleting notification with ID: {id}");
+
                 var notification = await _service.GetNotificationByIdAsync(id);
+                if (notification == null)
+                {
+                    _logger.LogWarning($"Notification with ID {id} not found");
+                    return NotFound();
+                }
 
                 await _service.DeleteNotificationAsync(notification);
                 return Ok();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                _logger.LogError($"Concurrency error occurred while deleting notification with ID {id}: {ex.Message}");
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest("Notification is null: " + ex.Message);
+                _logger.LogError($"Notification is null: {ex.Message}");
+                return BadRequest("Notification is null");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Internal server error: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
