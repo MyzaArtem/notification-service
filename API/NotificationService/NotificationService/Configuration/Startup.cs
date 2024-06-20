@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NotificationService.Abstractions;
 using NotificationService.Data;
+using NotificationService.Models;
 using NotificationService.Repositories;
-using NotificationService.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NotificationService.Configuration
@@ -28,14 +29,15 @@ namespace NotificationService.Configuration
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
-            services.AddScoped<INotificationService, NotificationServiceImpl>();
+            //services.AddScoped<INotificationService, NotificationServiceImpl>();
+            services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
 
             services.AddScoped<INotificationRepository, NotificationRepository>();
-            services.AddScoped<INotificationCategoryRepository, NotificationCategoryRepository>();
-            services.AddScoped<INotificationSettingsRepository, NotificationSettingsRepository>();
-            services.AddScoped<INotificationTypeRepository, NotificationTypeRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IRepository<NotificationCategory>, EFRepository<NotificationCategory>>();
+            services.AddScoped<IRepository<NotificationSettings>, EFRepository<NotificationSettings>>();
+            services.AddScoped<IRepository<NotificationType>, EFRepository<NotificationType>>();
+            services.AddScoped<IRepository<User>, EFRepository<User>>();
+            services.AddScoped<IRepository<Service>, EFRepository<Service>>();
 
             services.AddControllers();
 
@@ -72,11 +74,11 @@ namespace NotificationService.Configuration
 
                 await PrepareDatebase.Prepare(
                     serviceScope.ServiceProvider.GetService<INotificationRepository>(),
-                    serviceScope.ServiceProvider.GetService<INotificationCategoryRepository>(),
-                    serviceScope.ServiceProvider.GetService<INotificationSettingsRepository>(),
-                    serviceScope.ServiceProvider.GetService<INotificationTypeRepository>(),
-                    serviceScope.ServiceProvider.GetService<IUserRepository>(),
-                    serviceScope.ServiceProvider.GetService<IServiceRepository>()
+                    serviceScope.ServiceProvider.GetService<IRepository<NotificationCategory>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<NotificationSettings>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<NotificationType>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<User>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<Service>>()
                 );
             }
         }

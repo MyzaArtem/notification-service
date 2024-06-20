@@ -1,15 +1,20 @@
-﻿using NotificationService.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using NotificationService.Abstractions;
+using NotificationService.Models;
 
 namespace NotificationService.Repositories
 {
-    public interface INotificationRepository
+    public abstract class INotificationRepository : EFRepository<Notification>
     {
-        Task<bool> SaveChangesAsync();
-        Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId);
-        Task<Notification?> GetNotificationByIdAsync(int id);
-        Task CreateNotificationAsync(Notification notification);
-        void UpdateNotificationAsync(Notification existingNotification, Notification notification);
-        void DeleteNotificationAsync(Notification notification);
-    }
+        protected INotificationRepository(DbContext dataContext) : base(dataContext)
+        {
+        }
 
+        public virtual async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(int userId)
+        {
+            return await _dataContext.Set<Notification>()
+                                     .Where(n => n.UserId == userId)
+                                     .ToListAsync();
+        }
+    }
 }

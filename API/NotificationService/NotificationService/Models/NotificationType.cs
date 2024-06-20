@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NotificationService.Abstractions;
+using System.ComponentModel.DataAnnotations;
 
 namespace NotificationService.Models
 {
-    public class NotificationType
+    public class NotificationType : BaseEntity
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
-
         [Required]
         public int ServiceId { get; set; }
         public Service Service { get; set; }

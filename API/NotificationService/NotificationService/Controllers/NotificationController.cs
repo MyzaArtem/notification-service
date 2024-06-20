@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Dtos;
 using NotificationService.Models;
-using NotificationService.Services;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NotificationService.Abstractions;
+using System.Runtime.InteropServices;
+using NotificationService.Repositories;
 
 namespace NotificationService.Controllers
 {
@@ -15,11 +17,11 @@ namespace NotificationService.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationService _service;
+        private readonly NotificationRepository _service;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationService service, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(NotificationRepository service, IMapper mapper, ILogger<NotificationController> logger)
         {
             _service = service;
             _mapper = mapper;
@@ -55,13 +57,13 @@ namespace NotificationService.Controllers
         }
 
         [HttpGet("{id}", Name = "GetNotificationById")]
-        public async Task<ActionResult<NotificationReadDto>> GetNotificationById(int id)
+        public async Task<ActionResult<NotificationReadDto>> GetNotificationById(Guid id)
         {
             try
             {
                 _logger.LogInformation($"Fetching notification with ID: {id}");
 
-                var notification = await _service.GetNotificationByIdAsync(id);
+                var notification = await _service.GetAsync(id);
                 if (notification == null)
                 {
                     _logger.LogWarning($"Notification with ID {id} not found");
@@ -90,7 +92,7 @@ namespace NotificationService.Controllers
                 _logger.LogInformation($"Creating new notification");
 
                 var notificationModel = _mapper.Map<Notification>(notificationCreateDto);
-                await _service.CreateNotificationAsync(notificationModel);
+                await _service.CreateAsync(notificationModel);
 
                 var notificationReadDto = _mapper.Map<NotificationReadDto>(notificationModel);
 
@@ -116,7 +118,7 @@ namespace NotificationService.Controllers
                 _logger.LogInformation($"Updating notification with ID: {id}");
 
                 var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
-                await _service.UpdateNotificationAsync(notificationModel);
+                await _service.UpdateAsync(notificationModel);
 
                 return Ok();
             }
@@ -138,20 +140,13 @@ namespace NotificationService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNotification(int id)
+        public async Task<IActionResult> DeleteNotification(Guid id)
         {
             try
             {
                 _logger.LogInformation($"Deleting notification with ID: {id}");
 
-                var notification = await _service.GetNotificationByIdAsync(id);
-                if (notification == null)
-                {
-                    _logger.LogWarning($"Notification with ID {id} not found");
-                    return NotFound();
-                }
-
-                await _service.DeleteNotificationAsync(notification);
+                await _service.DeleteAsync(id);
                 return Ok();
             }
             catch (DbUpdateConcurrencyException ex)
