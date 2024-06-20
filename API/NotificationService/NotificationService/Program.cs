@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using NotificationService.Configuration;
-using NotificationService.Data;
 using NotificationService.Models;
 using NotificationService.Repositories;
 

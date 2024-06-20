@@ -7,7 +7,6 @@ namespace NotificationService.Models
     {
         [Required]
         public string Name { get; set; }
-
     }
 
 }

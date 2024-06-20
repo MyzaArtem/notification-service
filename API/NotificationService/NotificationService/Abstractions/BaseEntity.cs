@@ -8,5 +8,8 @@ namespace NotificationService.Abstractions
         [Required]
         public Guid Id { get; set; }
 
+        [Required]
+        public bool RequiresAction { get; set; }
+
     }
 }

@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using NotificationService.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace NotificationService.Models
+namespace NotificationService.Repositories
 {
     public class AppDbContext : DbContext
     {

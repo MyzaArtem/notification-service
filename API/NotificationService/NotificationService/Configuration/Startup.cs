@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NotificationService.Abstractions;
-using NotificationService.Data;
 using NotificationService.Models;
 using NotificationService.Repositories;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -25,7 +24,7 @@ namespace NotificationService.Configuration
                 throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
             }
             services.AddLogging();
-
+            //serilog 
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 

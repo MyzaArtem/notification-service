@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NotificationService.Data;
 using NotificationService.Models;
 using System;
 using System.Collections.Generic;
