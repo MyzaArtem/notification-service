@@ -8,11 +8,10 @@ namespace Infrastructure.Implemenation
     public class NotificationRepository : INotificationRepository
     {
         private EFRepository<Notification> eFRepository;
-        private readonly AppDbContext _dataContext;
+
         public NotificationRepository(AppDbContext dataContext)
         {
             eFRepository = new EFRepository<Notification>(dataContext);
-            _dataContext = dataContext;
         }
 
         public Task CreateAsync(Notification entity)
@@ -32,7 +31,7 @@ namespace Infrastructure.Implemenation
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(Guid userId)
         {
-            return await _dataContext.Set<Notification>()
+            return await eFRepository.Query()
                                      .Where(n => n.UserId == userId)
                                      .ToListAsync();
         }

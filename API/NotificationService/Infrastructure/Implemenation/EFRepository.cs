@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Implemenation
 {
-    public class EFRepository<T> : IRepository<T> where T : BaseEntity
+    public class EFRepository<T> : IRepository<T>, IQuerier<T> where T : BaseEntity
     {
         private readonly AppDbContext _dataContext;
         public EFRepository(AppDbContext dataContext)
@@ -16,6 +16,10 @@ namespace Infrastructure.Implemenation
         {
             await _dataContext.AddAsync(entity);
             await _dataContext.SaveChangesAsync();
+        }
+        public IQueryable<T> Query()
+        {
+            return _dataContext.Set<T>();
         }
 
         public async Task DeleteAsync(Guid id)
