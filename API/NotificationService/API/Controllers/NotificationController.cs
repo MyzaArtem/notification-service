@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using AutoMapper;
 using Domain.Models;
+using Application.Interfaces;
 using Infrastructure.Implemenation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,11 @@ namespace API.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly NotificationRepository _service;
+        private readonly INotificationRepository _service;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(NotificationRepository service, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(INotificationRepository service, IMapper mapper, ILogger<NotificationController> logger)
         {
             _service = service;
             _mapper = mapper;

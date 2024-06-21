@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Implemenation
 {
-    public abstract class EFRepository<T> : IRepository<T> where T : BaseEntity
+    public class EFRepository<T> : IRepository<T> where T : BaseEntity
     {
-        protected readonly AppDbContext _dataContext;
+        private readonly AppDbContext _dataContext;
         public EFRepository(AppDbContext dataContext)
         {
             _dataContext = dataContext;

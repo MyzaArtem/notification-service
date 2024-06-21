@@ -5,10 +5,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Implemenation
 {
-    public class NotificationRepository : EFRepository<Notification>, INotificationRepository
+    public class NotificationRepository : INotificationRepository
     {
-        public NotificationRepository(AppDbContext dataContext) : base(dataContext)
+        private EFRepository<Notification> eFRepository;
+        private readonly AppDbContext _dataContext;
+        public NotificationRepository(AppDbContext dataContext)
         {
+            eFRepository = new EFRepository<Notification>(dataContext);
+            _dataContext = dataContext;
+        }
+
+        public Task CreateAsync(Notification entity)
+        {
+            return eFRepository.CreateAsync(entity);
+        }
+
+        public Task DeleteAsync(Guid id)
+        {
+            return eFRepository.DeleteAsync(id);
+        }
+
+        public Task<IEnumerable<Notification>> GetAllAsync()
+        {
+            return eFRepository.GetAllAsync();
         }
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(Guid userId)
@@ -16,6 +35,16 @@ namespace Infrastructure.Implemenation
             return await _dataContext.Set<Notification>()
                                      .Where(n => n.UserId == userId)
                                      .ToListAsync();
+        }
+
+        public Task<Notification?> GetAsync(Guid id)
+        {
+            return eFRepository.GetAsync(id);
+        }
+
+        public Task UpdateAsync(Notification entity)
+        {
+            return eFRepository.UpdateAsync(entity);
         }
     }
 }

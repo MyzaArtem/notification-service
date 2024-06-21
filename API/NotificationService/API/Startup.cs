@@ -25,6 +25,7 @@ namespace API
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
+            //services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddScoped<INotificationRepository, NotificationRepository>();
             /*services.AddScoped<IRepository<NotificationCategory>, EFRepository<NotificationCategory>>();
             services.AddScoped<IRepository<NotificationSettings>, EFRepository<NotificationSettings>>();
