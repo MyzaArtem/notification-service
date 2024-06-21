@@ -12,6 +12,5 @@ namespace Domain.Models
         public Guid PersonId { get; set; }
 
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-        public ICollection<NotificationSettings> NotificationSettings { get; set; } = new List<NotificationSettings>();
     }
 }

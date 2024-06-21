@@ -14,19 +14,19 @@ namespace Infrastructure.Implemenation
             eFRepository = new EFRepository<Notification>(dataContext);
         }
 
-        public Task CreateAsync(Notification entity)
+        public async Task CreateAsync(Notification entity)
         {
-            return eFRepository.CreateAsync(entity);
+            await eFRepository.CreateAsync(entity);
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            return eFRepository.DeleteAsync(id);
+            await eFRepository.DeleteAsync(id);
         }
 
-        public Task<IEnumerable<Notification>> GetAllAsync()
+        public async Task<IEnumerable<Notification>> GetAllAsync()
         {
-            return eFRepository.GetAllAsync();
+            return await eFRepository.GetAllAsync();
         }
 
         public async Task<IEnumerable<Notification>> GetAllNotificationsForUserAsync(Guid userId)
@@ -36,14 +36,14 @@ namespace Infrastructure.Implemenation
                                      .ToListAsync();
         }
 
-        public Task<Notification?> GetAsync(Guid id)
+        public async Task<Notification?> GetAsync(Guid id)
         {
-            return eFRepository.GetAsync(id);
+            return await eFRepository.GetAsync(id);
         }
 
-        public Task UpdateAsync(Notification entity)
+        public async Task UpdateAsync(Notification entity)
         {
-            return eFRepository.UpdateAsync(entity);
+            await eFRepository.UpdateAsync(entity);
         }
     }
 }

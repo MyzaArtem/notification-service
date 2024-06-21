@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 using Infrastructure.Implemenation;
+using Infrastructure.Data;
 using Domain.Models;
 
 namespace API
@@ -21,17 +22,18 @@ namespace API
             {
                 throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
             }
+
             services.AddLogging();
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
             //services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddScoped<INotificationRepository, NotificationRepository>();
-            /*services.AddScoped<IRepository<NotificationCategory>, EFRepository<NotificationCategory>>();
+            services.AddScoped<IRepository<NotificationCategory>, EFRepository<NotificationCategory>>();
             services.AddScoped<IRepository<NotificationSettings>, EFRepository<NotificationSettings>>();
             services.AddScoped<IRepository<NotificationType>, EFRepository<NotificationType>>();
             services.AddScoped<IRepository<User>, EFRepository<User>>();
-            services.AddScoped<IRepository<Service>, EFRepository<Service>>();*/
+            services.AddScoped<IRepository<Service>, EFRepository<Service>>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //serilog 
             services.AddControllers();
@@ -64,15 +66,15 @@ namespace API
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
                 context.Database.Migrate();
-                /*
-                                await PrepareDatebase.Prepare(
-                                    serviceScope.ServiceProvider.GetService<INotificationRepository>(),
-                                    serviceScope.ServiceProvider.GetService<IRepository<NotificationCategory>>(),
-                                    serviceScope.ServiceProvider.GetService<IRepository<NotificationSettings>>(),
-                                    serviceScope.ServiceProvider.GetService<IRepository<NotificationType>>(),
-                                    serviceScope.ServiceProvider.GetService<IRepository<User>>(),
-                                    serviceScope.ServiceProvider.GetService<IRepository<Service>>()
-                                );*/
+
+                await PrepareDatabase.Prepare(
+                    serviceScope.ServiceProvider.GetService<INotificationRepository>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<NotificationCategory>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<NotificationSettings>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<NotificationType>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<User>>(),
+                    serviceScope.ServiceProvider.GetService<IRepository<Service>>()
+                );
             }
         }
     }

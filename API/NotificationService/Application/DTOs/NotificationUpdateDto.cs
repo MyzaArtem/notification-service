@@ -2,13 +2,10 @@
 {
     public class NotificationUpdateDto
     {
-        public int UserId { get; set; }
-        public int ServiceId { get; set; }
-        public int NotificationTypeId { get; set; }
-        public int NotificationCategoryId { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public bool IsRead { get; set; }
+        public DateTime? ReadAt { get; set; }
+        public short Status { get; set; }
     }
 }
