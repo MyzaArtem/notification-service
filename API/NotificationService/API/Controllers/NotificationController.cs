@@ -108,21 +108,21 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNotification(int id, NotificationUpdateDto notificationUpdateDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateNotification(NotificationUpdateDto notificationUpdateDto)
         {
             try
             {
-                _logger.LogInformation($"Updating notification with ID: {id}");
+                _logger.LogInformation($"Updating notification with ID: {notificationUpdateDto.Id}");
 
-                var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
-                var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationModel));
+                // var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
+                var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto));
 
                 return Ok(updatedId);
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while updating notification with ID {id}: {ex.Message}");
+                _logger.LogError($"Concurrency error occurred while updating notification : {ex.Message}");
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (ArgumentNullException ex)

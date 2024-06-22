@@ -20,7 +20,7 @@ namespace Infrastructure.Handlers.NotificationHandler
                 throw new ArgumentNullException(nameof(request.Notification));
             }
             var notification = await _appDbContext.Notifications
-                .FirstOrDefaultAsync(n => n.Id == request.Notification.Id, cancellationToken);
+                .FirstOrDefaultAsync(n => n.Id == request.Notification.Id);
 
             if (notification == null)
             {
@@ -29,7 +29,6 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             notification.Title = request.Notification.Title;
             notification.Message = request.Notification.Message;
-            notification.UserId = request.Notification.UserId;
             notification.ReadAt = request.Notification.ReadAt;
 
             _appDbContext.Notifications.Update(notification);

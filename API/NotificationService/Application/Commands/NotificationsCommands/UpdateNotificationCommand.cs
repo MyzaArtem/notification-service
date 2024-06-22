@@ -1,10 +1,10 @@
-﻿using Domain.Models;
+﻿using Application.DTOs;
 using MediatR;
 
 namespace Application.Commands.NotificationsCommands
 {
-    public class UpdateNotificationCommand(Notification? notification) : IRequest<Guid>
+    public class UpdateNotificationCommand(NotificationUpdateDto? notification) : IRequest<Guid>
     {
-        public Notification? Notification { get; } = notification;
+        public NotificationUpdateDto? Notification { get; } = notification;
     }
 }
