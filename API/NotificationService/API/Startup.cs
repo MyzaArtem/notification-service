@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Infrastructure.Implemenation;
 using Infrastructure.Data;
 using Domain.Models;
+using Infrastructure.Handlers.NotificationHandler;
 
 namespace API
 {
@@ -27,14 +28,15 @@ namespace API
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
-            //services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IRepository<NotificationCategory>, EFRepository<NotificationCategory>>();
             services.AddScoped<IRepository<NotificationSettings>, EFRepository<NotificationSettings>>();
             services.AddScoped<IRepository<NotificationType>, EFRepository<NotificationType>>();
             services.AddScoped<IRepository<User>, EFRepository<User>>();
             services.AddScoped<IRepository<Service>, EFRepository<Service>>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddMediatR(cfg=>cfg.RegisterServicesFromAssemblies(typeof(GetAllNotificationsForUserHandler).Assembly));
             //serilog 
             services.AddControllers();
 

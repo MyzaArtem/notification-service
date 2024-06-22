@@ -2,9 +2,10 @@
 using AutoMapper;
 using Domain.Models;
 using Application.Interfaces;
-using Infrastructure.Implemenation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using Application.Queries.NotificationsQuery;
 
 namespace API.Controllers
 {
@@ -12,13 +13,15 @@ namespace API.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationRepository _service;
+        private readonly INotificationRepository _repo;
+        private readonly Mediator _mediator;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationRepository service, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(INotificationRepository repo, Mediator mediator, IMapper mapper, ILogger<NotificationController> logger)
         {
-            _service = service;
+            _repo = repo;
+            _mediator = mediator;
             _mapper = mapper;
             _logger = logger;
         }
@@ -30,7 +33,8 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Fetching notifications for user with ID: {userId}");
 
-                var notifications = await _service.GetAllNotificationsForUserAsync(userId);
+                //var notifications = await _repo.GetAllNotificationsForUserAsync(userId);
+                var notifications = _mediator.Send(new GetAllNotificationsForUserQuery(userId));
                 if (notifications == null)
                 {
                     _logger.LogWarning($"Notifications not found for user with ID: {userId}");
@@ -58,7 +62,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Fetching notification with ID: {id}");
 
-                var notification = await _service.GetAsync(id);
+                var notification = await _repo.GetAsync(id);
                 if (notification == null)
                 {
                     _logger.LogWarning($"Notification with ID {id} not found");
@@ -87,7 +91,7 @@ namespace API.Controllers
                 _logger.LogInformation($"Creating new notification");
 
                 var notificationModel = _mapper.Map<Notification>(notificationCreateDto);
-                await _service.CreateAsync(notificationModel);
+                await _repo.CreateAsync(notificationModel);
 
                 var notificationReadDto = _mapper.Map<NotificationReadDto>(notificationModel);
 
@@ -113,7 +117,7 @@ namespace API.Controllers
                 _logger.LogInformation($"Updating notification with ID: {id}");
 
                 var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
-                await _service.UpdateAsync(notificationModel);
+                await _repo.UpdateAsync(notificationModel);
 
                 return Ok();
             }
@@ -141,7 +145,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Deleting notification with ID: {id}");
 
-                await _service.DeleteAsync(id);
+                await _repo.DeleteAsync(id);
                 return Ok();
             }
             catch (DbUpdateConcurrencyException ex)
