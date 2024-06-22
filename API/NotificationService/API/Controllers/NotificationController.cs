@@ -32,9 +32,8 @@ namespace API.Controllers
             try
             {
                 _logger.LogInformation($"Fetching notifications for user with ID: {userId}");
-
-                //var notifications = await _repo.GetAllNotificationsForUserAsync(userId);
-                var notifications = _mediator.Send(new GetAllNotificationsForUserQuery(userId));
+                ;
+                var notifications = await _mediator.Send(new GetAllNotificationsForUserQuery(userId));
                 if (notifications == null)
                 {
                     _logger.LogWarning($"Notifications not found for user with ID: {userId}");
@@ -62,7 +61,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Fetching notification with ID: {id}");
 
-                var notification = await _repo.GetAsync(id);
+                var notification = await _mediator.Send(new GetNotificationByIdQuery(id));
                 if (notification == null)
                 {
                     _logger.LogWarning($"Notification with ID {id} not found");
