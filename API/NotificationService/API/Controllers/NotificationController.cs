@@ -1,7 +1,6 @@
 ﻿using Application.DTOs;
 using AutoMapper;
 using Domain.Models;
-using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
@@ -14,14 +13,12 @@ namespace API.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        // private readonly INotificationRepository _repo;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationRepository repo, IMediator mediator, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(IMediator mediator, IMapper mapper, ILogger<NotificationController> logger)
         {
-            // _repo = repo;
             _mediator = mediator;
             _mapper = mapper;
             _logger = logger;
@@ -115,7 +112,6 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Updating notification with ID: {notificationUpdateDto.Id}");
 
-                // var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
                 var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto));
 
                 return Ok(updatedId);

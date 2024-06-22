@@ -2,10 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 using Infrastructure.Implemenation;
-using Infrastructure.Data;
 using Domain.Models;
 using Infrastructure.Handlers.NotificationHandler;
-using System.Reflection;
 
 namespace API
 {
