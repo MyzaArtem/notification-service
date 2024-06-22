@@ -2,15 +2,19 @@
 using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Handlers.NotificationHandler
 {
     public class UpdateNotificationHandler : IRequestHandler<UpdateNotificationCommand, Guid>
     {
         private readonly AppDbContext _appDbContext;
-        public UpdateNotificationHandler(AppDbContext appDbContext)
+        private readonly ILogger<UpdateNotificationHandler> _logger;
+
+        public UpdateNotificationHandler(AppDbContext appDbContext, ILogger<UpdateNotificationHandler> logger)
         {
-            _appDbContext = appDbContext;
+            _appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Guid> Handle(UpdateNotificationCommand request, CancellationToken cancellationToken)
@@ -19,8 +23,9 @@ namespace Infrastructure.Handlers.NotificationHandler
             {
                 throw new ArgumentNullException(nameof(request.Notification));
             }
+
             var notification = await _appDbContext.Notifications
-                .FirstOrDefaultAsync(n => n.Id == request.Notification.Id);
+                .FirstOrDefaultAsync(n => n.Id == request.Notification.Id, cancellationToken);
 
             if (notification == null)
             {
@@ -33,6 +38,8 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("Updated notification with ID: {NotificationId}", notification.Id);
 
             return notification.Id;
         }

@@ -23,7 +23,6 @@ namespace API
                 throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
             }
 
-            services.AddLogging();
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(connection));
 
@@ -35,14 +34,17 @@ namespace API
             services.AddScoped<IRepository<Service>, EFRepository<Service>>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //services.AddMediatR(Assembly.GetExecutingAssembly());
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetAllNotificationsForUserHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetNotificationByIdHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateNotificationHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(UpdateNotificationHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DeleteNotificationHandler).Assembly));
-            //serilog 
+
             services.AddControllers();
+
+            services.AddAuthentication();
+            services.AddAuthorization();
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
@@ -61,6 +63,8 @@ namespace API
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -2,6 +2,7 @@
 using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 
 namespace Infrastructure.Handlers.NotificationHandler
@@ -9,10 +10,12 @@ namespace Infrastructure.Handlers.NotificationHandler
     public class DeleteNotificationHandler : IRequestHandler<DeleteNotificationCommand>
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ILogger<DeleteNotificationHandler> _logger;
 
-        public DeleteNotificationHandler(AppDbContext appDbContext)
+        public DeleteNotificationHandler(AppDbContext appDbContext, ILogger<DeleteNotificationHandler> logger)
         {
-            _appDbContext = appDbContext;
+            _appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
@@ -29,6 +32,8 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("Deleted notification with ID: {NotificationId}", request.Id);
 
         }
     }

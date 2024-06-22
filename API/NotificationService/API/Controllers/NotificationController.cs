@@ -29,12 +29,12 @@ namespace API.Controllers
         {
             try
             {
-                _logger.LogInformation($"Fetching notifications for user with ID: {userId}");
+                _logger.LogInformation($"Fetching notifications for user with ID: {userId}", userId);
                 ;
                 var notifications = await _mediator.Send(new GetAllNotificationsForUserQuery(userId));
                 if (notifications == null)
                 {
-                    _logger.LogWarning($"Notifications not found for user with ID: {userId}");
+                    _logger.LogWarning($"Notifications not found for user with ID: {userId}", userId);
                     return NotFound();
                 }
 
@@ -42,12 +42,12 @@ namespace API.Controllers
             }
             catch (ArgumentException ex)
             {
-                _logger.LogError($"User ID is invalid: {ex.Message}");
+                _logger.LogError($"User ID is invalid: {ex.Message}", ex.Message);
                 return BadRequest("User ID is invalid");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}");
+                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -57,12 +57,12 @@ namespace API.Controllers
         {
             try
             {
-                _logger.LogInformation($"Fetching notification with ID: {id}");
+                _logger.LogInformation($"Fetching notification with ID: {id}", id);
 
                 var notification = await _mediator.Send(new GetNotificationByIdQuery(id));
                 if (notification == null)
                 {
-                    _logger.LogWarning($"Notification with ID {id} not found");
+                    _logger.LogWarning($"Notification with ID {id} not found", id);
                     return NotFound();
                 }
 
@@ -70,12 +70,12 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while fetching notification with ID {id}: {ex.Message}");
+                _logger.LogError($"Concurrency error occurred while fetching notification with ID {id}: {ex.Message}", id, ex.Message);
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}");
+                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -95,12 +95,12 @@ namespace API.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                _logger.LogError($"Notification is null: {ex.Message}");
+                _logger.LogError($"Notification is null: {ex.Message}", ex.Message);
                 return BadRequest("Notification is null");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}");
+                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -110,7 +110,7 @@ namespace API.Controllers
         {
             try
             {
-                _logger.LogInformation($"Updating notification with ID: {notificationUpdateDto.Id}");
+                _logger.LogInformation($"Updating notification with ID: {notificationUpdateDto.Id}", notificationUpdateDto.Id);
 
                 var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto));
 
@@ -118,22 +118,22 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while updating notification : {ex.Message}");
+                _logger.LogError($"Concurrency error occurred while updating notification : {ex.Message}", ex.Message);
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (ArgumentNullException ex)
             {
-                _logger.LogError($"Notification is null: {ex.Message}");
+                _logger.LogError($"Notification is null: {ex.Message}", ex.Message);
                 return BadRequest("Notification is null");
             }
             catch (InvalidOperationException ex)
             {
-                _logger.LogError($"Notification with this ID is doesnt exist: {ex.Message}");
+                _logger.LogError($"Notification with this ID is doesnt exist: {ex.Message}", ex.Message);
                 return BadRequest("Notification with this ID is doesnt exist");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}");
+                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -143,24 +143,24 @@ namespace API.Controllers
         {
             try
             {
-                _logger.LogInformation($"Deleting notification with ID: {id}");
+                _logger.LogInformation($"Deleting notification with ID: {id}", id);
 
                 await _mediator.Send(new DeleteNotificationCommand(id));
                 return Ok();
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while deleting notification with ID {id}: {ex.Message}");
+                _logger.LogError($"Concurrency error occurred while deleting notification with ID {id}: {ex.Message}", id, ex.Message);
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (ArgumentNullException ex)
             {
-                _logger.LogError($"Notification is null: {ex.Message}");
+                _logger.LogError($"Notification is null: {ex.Message}", ex.Message);
                 return BadRequest("Notification is null");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}");
+                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }

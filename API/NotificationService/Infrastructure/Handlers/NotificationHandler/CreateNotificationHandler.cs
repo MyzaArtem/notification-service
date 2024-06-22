@@ -1,5 +1,5 @@
 ﻿using Application.Commands.NotificationsCommands;
-using Domain.Models;
+using Serilog;
 using Infrastructure.Data;
 using MediatR;
 
@@ -20,8 +20,18 @@ namespace Infrastructure.Handlers.NotificationHandler
                 throw new ArgumentNullException(nameof(request.notification));
             }
             request.notification.Id = id;
-            await _appDbContext.Notifications.AddAsync(request.notification);
-            await _appDbContext.SaveChangesAsync(cancellationToken);
+
+            try
+            {
+                await _appDbContext.Notifications.AddAsync(request.notification);
+                await _appDbContext.SaveChangesAsync(cancellationToken);
+                Log.Information($"Notification created successfully with ID: {id}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to create notification with ID: {id}");
+                throw ex;
+            }
 
             return id;
         }
