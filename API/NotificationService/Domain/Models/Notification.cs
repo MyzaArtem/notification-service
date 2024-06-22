@@ -39,8 +39,5 @@ namespace Domain.Models
         public DateTime CreatedAt { get; set; }
 
         public DateTime? ReadAt { get; set; }
-
-        [Required]
-        public short Status { get; set; }
     }
 }

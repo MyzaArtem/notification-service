@@ -14,7 +14,6 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext = appDbContext;
         }
         public async Task<List<Notification>> Handle(GetAllNotificationsForUserQuery request, CancellationToken cancellationToken)
-            => await _appDbContext.Notifications.Where(n => n.UserId == request.UserID).ToListAsync<Notification>();
-
+            => await _appDbContext.Notifications.Where(n => n.UserId == request.UserID && n.Status != -1).ToListAsync<Notification>();
     }
 }

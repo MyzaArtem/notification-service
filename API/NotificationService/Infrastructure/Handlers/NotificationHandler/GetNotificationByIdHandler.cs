@@ -14,6 +14,6 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext = appDbContext;
         }
         public async Task<Notification> Handle(GetNotificationByIdQuery request, CancellationToken cancellationToken)
-             => await _appDbContext.Notifications.FirstOrDefaultAsync(x => x.Id == request.Id);
+             => await _appDbContext.Notifications.FirstOrDefaultAsync(x => x.Id == request.Id && x.Status != -1, cancellationToken);
     }
 }

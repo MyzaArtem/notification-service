@@ -25,8 +25,11 @@ namespace Infrastructure.Handlers.NotificationHandler
                 throw new InvalidOperationException($"Notification with ID {request.Id} not found.");
             }
 
-            _appDbContext.Notifications.Remove(notification);
+            notification.Status = -1;
+
+            _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
+
         }
     }
 }
