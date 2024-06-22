@@ -14,11 +14,11 @@ namespace API.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationRepository _repo;
-        private readonly Mediator _mediator;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationRepository repo, Mediator mediator, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(INotificationRepository repo, IMediator mediator, IMapper mapper, ILogger<NotificationController> logger)
         {
             _repo = repo;
             _mediator = mediator;

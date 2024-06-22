@@ -5,6 +5,7 @@ using Infrastructure.Implemenation;
 using Infrastructure.Data;
 using Domain.Models;
 using Infrastructure.Handlers.NotificationHandler;
+using System.Reflection;
 
 namespace API
 {
@@ -36,6 +37,7 @@ namespace API
             services.AddScoped<IRepository<Service>, EFRepository<Service>>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetAllNotificationsForUserHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetNotificationByIdHandler).Assembly));
 
