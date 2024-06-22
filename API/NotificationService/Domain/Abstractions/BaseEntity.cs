@@ -9,6 +9,6 @@ namespace Domain.Abstractions
         public Guid Id { get; set; }
 
         [Required]
-        public bool RequiresAction { get; set; }
+        public short Status { get; set; }
     }
 }

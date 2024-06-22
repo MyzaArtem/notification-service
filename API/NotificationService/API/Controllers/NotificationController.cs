@@ -1,10 +1,11 @@
 ﻿using Application.DTOs;
 using AutoMapper;
 using Domain.Models;
-using Application.Interfaces;
-using Infrastructure.Implemenation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using Application.Queries.NotificationsQuery;
+using Application.Commands.NotificationsCommands;
 
 namespace API.Controllers
 {
@@ -12,13 +13,13 @@ namespace API.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationRepository _service;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
-        public NotificationController(INotificationRepository service, IMapper mapper, ILogger<NotificationController> logger)
+        public NotificationController(IMediator mediator, IMapper mapper, ILogger<NotificationController> logger)
         {
-            _service = service;
+            _mediator = mediator;
             _mapper = mapper;
             _logger = logger;
         }
@@ -29,8 +30,8 @@ namespace API.Controllers
             try
             {
                 _logger.LogInformation($"Fetching notifications for user with ID: {userId}");
-
-                var notifications = await _service.GetAllNotificationsForUserAsync(userId);
+                ;
+                var notifications = await _mediator.Send(new GetAllNotificationsForUserQuery(userId));
                 if (notifications == null)
                 {
                     _logger.LogWarning($"Notifications not found for user with ID: {userId}");
@@ -58,7 +59,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Fetching notification with ID: {id}");
 
-                var notification = await _service.GetAsync(id);
+                var notification = await _mediator.Send(new GetNotificationByIdQuery(id));
                 if (notification == null)
                 {
                     _logger.LogWarning($"Notification with ID {id} not found");
@@ -87,11 +88,10 @@ namespace API.Controllers
                 _logger.LogInformation($"Creating new notification");
 
                 var notificationModel = _mapper.Map<Notification>(notificationCreateDto);
-                await _service.CreateAsync(notificationModel);
-
+                var id = await _mediator.Send(new CreateNotificationCommand(notificationModel));
                 var notificationReadDto = _mapper.Map<NotificationReadDto>(notificationModel);
 
-                return CreatedAtRoute(nameof(GetNotificationById), new { id = notificationReadDto.Id }, notificationReadDto);
+                return Ok(id);
             }
             catch (ArgumentNullException ex)
             {
@@ -105,27 +105,31 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNotification(int id, NotificationUpdateDto notificationUpdateDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateNotification(NotificationUpdateDto notificationUpdateDto)
         {
             try
             {
-                _logger.LogInformation($"Updating notification with ID: {id}");
+                _logger.LogInformation($"Updating notification with ID: {notificationUpdateDto.Id}");
 
-                var notificationModel = _mapper.Map<Notification>(notificationUpdateDto);
-                await _service.UpdateAsync(notificationModel);
+                var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto));
 
-                return Ok();
+                return Ok(updatedId);
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while updating notification with ID {id}: {ex.Message}");
+                _logger.LogError($"Concurrency error occurred while updating notification : {ex.Message}");
                 return StatusCode(500, "Concurrency error occurred");
             }
             catch (ArgumentNullException ex)
             {
                 _logger.LogError($"Notification is null: {ex.Message}");
                 return BadRequest("Notification is null");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError($"Notification with this ID is doesnt exist: {ex.Message}");
+                return BadRequest("Notification with this ID is doesnt exist");
             }
             catch (Exception ex)
             {
@@ -141,7 +145,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Deleting notification with ID: {id}");
 
-                await _service.DeleteAsync(id);
+                await _mediator.Send(new DeleteNotificationCommand(id));
                 return Ok();
             }
             catch (DbUpdateConcurrencyException ex)
