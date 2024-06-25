@@ -122,7 +122,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private alertStatisticsServise: AlertStatisticsService,
     private notificationService: PublicationsBadgeService,
     private personService: PersonService,
-    private summCommentsStatusesService: SummCommentsStatusesService
+    private summCommentsStatusesService: SummCommentsStatusesService,
+
+    private signalRService: RealtimeClientService
   ) {
     this.routesData = this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -216,10 +218,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.getNewCommentsCount();
       }
     }
-
+    
     const switchUser = localStorage.getItem('switchPerson');
     if (switchUser === 'true') this.isSwitchActive = true;
-    this.cdRef.detectChanges();
+    this.cdRef.detectChanges();    
   }
 
   public getCurrentPerson() {

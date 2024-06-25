@@ -1,0 +1,9 @@
+<div>
+    <h3>Notifications (Unread: {{ unreadCount }})</h3>
+    <ul>
+      <li *ngFor="let notification of notifications">
+        <strong>{{ notification.title }}</strong>: {{ notification.message }} ({{ notification.createdAt | date:'short' }})
+      </li>
+    </ul>
+</div>
+  

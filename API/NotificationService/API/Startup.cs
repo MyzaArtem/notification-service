@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Infrastructure.Implemenation;
 using Domain.Models;
 using Infrastructure.Handlers.NotificationHandler;
+using API.Hubs;
 
 namespace API
 {
@@ -41,6 +42,17 @@ namespace API
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(UpdateNotificationHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DeleteNotificationHandler).Assembly));
 
+            services.AddSignalR();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             services.AddControllers();
 
             services.AddAuthentication();
@@ -71,6 +83,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/hubs/notifications");
             });
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
