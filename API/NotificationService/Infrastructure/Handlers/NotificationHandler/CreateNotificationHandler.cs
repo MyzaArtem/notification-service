@@ -21,9 +21,9 @@ namespace Infrastructure.Handlers.NotificationHandler
             }
             request.notification.Id = id;
 
-            await _appDbContext.Notifications.AddAsync(request.notification, cancellationToken);
+            await _appDbContext.Notifications.AddAsync(request.notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
-            Log.Information($"Уведомление с ID: {id} успешно создано");
+            Log.Information($"Notification created successfully with ID: {id}");
 
             return id;
         }
