@@ -23,7 +23,7 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             try
             {
-                await _appDbContext.Notifications.AddAsync(request.notification);
+                await _appDbContext.Notifications.AddAsync(request.notification, cancellationToken);
                 await _appDbContext.SaveChangesAsync(cancellationToken);
                 Log.Information($"Notification created successfully with ID: {id}");
             }

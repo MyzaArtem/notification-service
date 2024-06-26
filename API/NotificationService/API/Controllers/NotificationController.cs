@@ -17,6 +17,12 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<NotificationController> _logger;
 
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="NotificationController"/>.
+        /// </summary>
+        /// <param name="mediator">Экземпляр медиатора.</param>
+        /// <param name="mapper">Экземпляр маппера.</param>
+        /// <param name="logger">Экземпляр логгера.</param>
         public NotificationController(IMediator mediator, IMapper mapper, ILogger<NotificationController> logger)
         {
             _mediator = mediator;
@@ -24,17 +30,21 @@ namespace API.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Получает все уведомления для конкретного пользователя.
+        /// </summary>
+        /// <param name="userId">ID пользователя.</param>
+        /// <returns>Список уведомлений для пользователя.</returns>
         [HttpGet("foruser/{userId}", Name = "GetAllNotificationsForUser")]
         public async Task<ActionResult<IEnumerable<NotificationReadDto>>> GetAllNotificationsForUser(Guid userId)
         {
             try
             {
-                _logger.LogInformation($"Fetching notifications for user with ID: {userId}", userId);
-                ;
+                _logger.LogInformation($"Получение уведомлений для пользователя с ID: {userId}");
                 var notifications = await _mediator.Send(new GetAllNotificationsForUserQuery(userId));
                 if (notifications == null)
                 {
-                    _logger.LogWarning($"Notifications not found for user with ID: {userId}", userId);
+                    _logger.LogWarning($"Уведомления не найдены для пользователя с ID: {userId}");
                     return NotFound();
                 }
 
@@ -42,27 +52,32 @@ namespace API.Controllers
             }
             catch (ArgumentException ex)
             {
-                _logger.LogError($"User ID is invalid: {ex.Message}", ex.Message);
-                return BadRequest("User ID is invalid");
+                _logger.LogError($"Неверный ID пользователя: {ex.Message}");
+                return BadRequest("Неверный ID пользователя");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
-                return StatusCode(500, "Internal server error");
+                _logger.LogError($"Внутренняя ошибка сервера: {ex.Message}");
+                return StatusCode(500, "Внутренняя ошибка сервера");
             }
         }
 
+        /// <summary>
+        /// Получает уведомление по его ID.
+        /// </summary>
+        /// <param name="id">ID уведомления.</param>
+        /// <returns>Уведомление с указанным ID.</returns>
         [HttpGet("{id}", Name = "GetNotificationById")]
         public async Task<ActionResult<NotificationReadDto>> GetNotificationById(Guid id)
         {
             try
             {
-                _logger.LogInformation($"Fetching notification with ID: {id}", id);
+                _logger.LogInformation($"Получение уведомления с ID: {id}");
 
                 var notification = await _mediator.Send(new GetNotificationByIdQuery(id));
                 if (notification == null)
                 {
-                    _logger.LogWarning($"Notification with ID {id} not found", id);
+                    _logger.LogWarning($"Уведомление с ID {id} не найдено");
                     return NotFound();
                 }
 
@@ -70,22 +85,27 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while fetching notification with ID {id}: {ex.Message}", id, ex.Message);
-                return StatusCode(500, "Concurrency error occurred");
+                _logger.LogError($"Произошла ошибка конкурентного доступа при получении уведомления с ID {id}: {ex.Message}");
+                return StatusCode(500, "Произошла ошибка конкурентного доступа");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
-                return StatusCode(500, "Internal server error");
+                _logger.LogError($"Внутренняя ошибка сервера: {ex.Message}");
+                return StatusCode(500, "Внутренняя ошибка сервера");
             }
         }
 
+        /// <summary>
+        /// Создает новое уведомление.
+        /// </summary>
+        /// <param name="notificationCreateDto">DTO с деталями уведомления.</param>
+        /// <returns>ID созданного уведомления.</returns>
         [HttpPost]
         public async Task<ActionResult<NotificationReadDto>> CreateNotifications(NotificationCreateDto notificationCreateDto)
         {
             try
             {
-                _logger.LogInformation($"Creating new notification");
+                _logger.LogInformation("Создание нового уведомления");
 
                 var notificationModel = _mapper.Map<Notification>(notificationCreateDto);
                 var id = await _mediator.Send(new CreateNotificationCommand(notificationModel));
@@ -95,22 +115,27 @@ namespace API.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                _logger.LogError($"Notification is null: {ex.Message}", ex.Message);
-                return BadRequest("Notification is null");
+                _logger.LogError($"Уведомление равно null: {ex.Message}");
+                return BadRequest("Уведомление равно null");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
-                return StatusCode(500, "Internal server error");
+                _logger.LogError($"Внутренняя ошибка сервера: {ex.Message}");
+                return StatusCode(500, "Внутренняя ошибка сервера");
             }
         }
 
+        /// <summary>
+        /// Обновляет существующее уведомление.
+        /// </summary>
+        /// <param name="notificationUpdateDto">DTO с обновленными деталями уведомления.</param>
+        /// <returns>ID обновленного уведомления.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateNotification(NotificationUpdateDto notificationUpdateDto)
         {
             try
             {
-                _logger.LogInformation($"Updating notification with ID: {notificationUpdateDto.Id}", notificationUpdateDto.Id);
+                _logger.LogInformation($"Обновление уведомления с ID: {notificationUpdateDto.Id}");
 
                 var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto));
 
@@ -118,50 +143,55 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while updating notification : {ex.Message}", ex.Message);
-                return StatusCode(500, "Concurrency error occurred");
+                _logger.LogError($"Произошла ошибка конкурентного доступа при обновлении уведомления: {ex.Message}");
+                return StatusCode(500, "Произошла ошибка конкурентного доступа");
             }
             catch (ArgumentNullException ex)
             {
-                _logger.LogError($"Notification is null: {ex.Message}", ex.Message);
-                return BadRequest("Notification is null");
+                _logger.LogError($"Уведомление равно null: {ex.Message}");
+                return BadRequest("Уведомление равно null");
             }
             catch (InvalidOperationException ex)
             {
-                _logger.LogError($"Notification with this ID is doesnt exist: {ex.Message}", ex.Message);
-                return BadRequest("Notification with this ID is doesnt exist");
+                _logger.LogError($"Уведомление с этим ID не существует: {ex.Message}");
+                return BadRequest("Уведомление с этим ID не существует");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
-                return StatusCode(500, "Internal server error");
+                _logger.LogError($"Внутренняя ошибка сервера: {ex.Message}");
+                return StatusCode(500, "Внутренняя ошибка сервера");
             }
         }
 
+        /// <summary>
+        /// Удаляет уведомление по его ID.
+        /// </summary>
+        /// <param name="id">ID удаляемого уведомления.</param>
+        /// <returns>Результат выполнения действия.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotification(Guid id)
         {
             try
             {
-                _logger.LogInformation($"Deleting notification with ID: {id}", id);
+                _logger.LogInformation($"Удаление уведомления с ID: {id}");
 
                 await _mediator.Send(new DeleteNotificationCommand(id));
                 return Ok();
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                _logger.LogError($"Concurrency error occurred while deleting notification with ID {id}: {ex.Message}", id, ex.Message);
-                return StatusCode(500, "Concurrency error occurred");
+                _logger.LogError($"Произошла ошибка конкурентного доступа при удалении уведомления с ID {id}: {ex.Message}");
+                return StatusCode(500, "Произошла ошибка конкурентного доступа");
             }
             catch (ArgumentNullException ex)
             {
-                _logger.LogError($"Notification is null: {ex.Message}", ex.Message);
-                return BadRequest("Notification is null");
+                _logger.LogError($"Уведомление равно null: {ex.Message}");
+                return BadRequest("Уведомление равно null");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
-                return StatusCode(500, "Internal server error");
+                _logger.LogError($"Внутренняя ошибка сервера: {ex.Message}");
+                return StatusCode(500, "Внутренняя ошибка сервера");
             }
         }
     }

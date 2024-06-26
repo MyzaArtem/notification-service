@@ -3,7 +3,7 @@ using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
+using Domain.Enums;
 
 namespace Infrastructure.Handlers.NotificationHandler
 {
@@ -28,7 +28,7 @@ namespace Infrastructure.Handlers.NotificationHandler
                 throw new InvalidOperationException($"Notification with ID {request.Id} not found.");
             }
 
-            notification.Status = -1;
+            notification.Status = (short)Status.Deleted;
 
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);

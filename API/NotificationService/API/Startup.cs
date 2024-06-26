@@ -1,9 +1,11 @@
-﻿using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using API.Extensions;
 using Application.Interfaces;
-using Infrastructure.Implemenation;
 using Domain.Models;
-using Infrastructure.Handlers.NotificationHandler;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace API
 {
@@ -17,40 +19,12 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string? connection = Configuration.GetConnectionString("DefaultConnection");
-            if (connection == null)
-            {
-                throw new InvalidOperationException("Connection string 'DefaultConnection' is missing or null.");
-            }
-
-            services.AddDbContext<AppDbContext>(opt =>
-                opt.UseNpgsql(connection));
-
-            services.AddScoped<INotificationRepository, NotificationRepository>();
-            services.AddScoped<IRepository<NotificationCategory>, EFRepository<NotificationCategory>>();
-            services.AddScoped<IRepository<NotificationSettings>, EFRepository<NotificationSettings>>();
-            services.AddScoped<IRepository<NotificationType>, EFRepository<NotificationType>>();
-            services.AddScoped<IRepository<User>, EFRepository<User>>();
-            services.AddScoped<IRepository<Service>, EFRepository<Service>>();
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetAllNotificationsForUserHandler).Assembly));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetNotificationByIdHandler).Assembly));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CreateNotificationHandler).Assembly));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(UpdateNotificationHandler).Assembly));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DeleteNotificationHandler).Assembly));
-
-            services.AddControllers();
-
-            services.AddAuthentication();
-            services.AddAuthorization();
-
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Notification API", Version = "v1" });
-            });
+            services
+                .AddDatabaseConfiguration(Configuration)
+                .AddRepositories()
+                .AddMediatRHandlers()
+                .AddSwaggerConfiguration()
+                .AddCustomServices();
         }
 
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,13 +39,13 @@ namespace API
             app.UseRouting();
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
