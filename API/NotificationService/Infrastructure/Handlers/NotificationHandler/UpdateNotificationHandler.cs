@@ -1,4 +1,5 @@
 ﻿using Application.Commands.NotificationsCommands;
+using Application.DTOs;
 using Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Handlers.NotificationHandler
 {
-    public class UpdateNotificationHandler : IRequestHandler<UpdateNotificationCommand, Guid>
+    public class UpdateNotificationHandler : IRequestHandler<UpdateNotificationCommand, ServiceResponse>
     {
         private readonly AppDbContext _appDbContext;
         private readonly ILogger<UpdateNotificationHandler> _logger;
@@ -17,11 +18,11 @@ namespace Infrastructure.Handlers.NotificationHandler
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<Guid> Handle(UpdateNotificationCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse> Handle(UpdateNotificationCommand request, CancellationToken cancellationToken)
         {
             if (request.Notification == null)
             {
-                throw new ArgumentNullException(nameof(request.Notification));
+                return new ServiceResponse(true, "Уведомление равно null");
             }
 
             var notification = await _appDbContext.Notifications
@@ -29,7 +30,7 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             if (notification == null)
             {
-                throw new InvalidOperationException($"Notification with ID {request.Notification.Id} not found.");
+                return new ServiceResponse(true, "Уведомление не найдено");
             }
 
             notification.Title = request.Notification.Title;
@@ -39,9 +40,9 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Updated notification with ID: {NotificationId}", notification.Id);
+            _logger.LogInformation("Уведомление с ID: {NotificationId} успешно обновлено", notification.Id);
 
-            return notification.Id;
+            return new ServiceResponse(true, "Уведомление успешно обновлено");
         }
     }
 }

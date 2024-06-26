@@ -2,6 +2,7 @@
 using Domain.Abstractions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Domain.Enums;
 
 namespace Infrastructure.Implemenation
 {
@@ -24,12 +25,19 @@ namespace Infrastructure.Implemenation
 
         public async Task DeleteAsync(Guid id)
         {
-            var entity2 = await _dataContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
+            /*var entity2 = await _dataContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity2 == null)
             {
                 return;
             }
             _dataContext.Set<T>().Remove(entity2);
+            await _dataContext.SaveChangesAsync();*/
+            var entity = await _dataContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+            {
+                return;
+            }
+            entity.Status = (short)Status.Deleted;
             await _dataContext.SaveChangesAsync();
         }
 

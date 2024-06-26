@@ -129,7 +129,7 @@ namespace API.Controllers
         /// Обновляет существующее уведомление.
         /// </summary>
         /// <param name="notificationUpdateDto">DTO с обновленными деталями уведомления.</param>
-        /// <returns>ID обновленного уведомления.</returns>
+        /// <returns>Ответ с флагом и сообщением.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateNotification(NotificationUpdateDto notificationUpdateDto)
         {
@@ -137,24 +137,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Обновление уведомления с ID: {notificationUpdateDto.Id}");
 
-                var updatedId = await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto));
-
-                return Ok(updatedId);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                _logger.LogError($"Произошла ошибка конкурентного доступа при обновлении уведомления: {ex.Message}");
-                return StatusCode(500, "Произошла ошибка конкурентного доступа");
-            }
-            catch (ArgumentNullException ex)
-            {
-                _logger.LogError($"Уведомление равно null: {ex.Message}");
-                return BadRequest("Уведомление равно null");
-            }
-            catch (InvalidOperationException ex)
-            {
-                _logger.LogError($"Уведомление с этим ID не существует: {ex.Message}");
-                return BadRequest("Уведомление с этим ID не существует");
+                return Ok(await _mediator.Send(new UpdateNotificationCommand(notificationUpdateDto)));
             }
             catch (Exception ex)
             {
@@ -167,7 +150,7 @@ namespace API.Controllers
         /// Удаляет уведомление по его ID.
         /// </summary>
         /// <param name="id">ID удаляемого уведомления.</param>
-        /// <returns>Результат выполнения действия.</returns>
+        /// <returns>Ответ с флагом и сообщением.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotification(Guid id)
         {
@@ -175,18 +158,7 @@ namespace API.Controllers
             {
                 _logger.LogInformation($"Удаление уведомления с ID: {id}");
 
-                await _mediator.Send(new DeleteNotificationCommand(id));
-                return Ok();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                _logger.LogError($"Произошла ошибка конкурентного доступа при удалении уведомления с ID {id}: {ex.Message}");
-                return StatusCode(500, "Произошла ошибка конкурентного доступа");
-            }
-            catch (ArgumentNullException ex)
-            {
-                _logger.LogError($"Уведомление равно null: {ex.Message}");
-                return BadRequest("Уведомление равно null");
+                return Ok(await _mediator.Send(new DeleteNotificationCommand(id)));
             }
             catch (Exception ex)
             {

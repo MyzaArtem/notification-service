@@ -4,10 +4,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Domain.Enums;
+using Application.DTOs;
 
 namespace Infrastructure.Handlers.NotificationHandler
 {
-    public class DeleteNotificationHandler : IRequestHandler<DeleteNotificationCommand>
+    public class DeleteNotificationHandler : IRequestHandler<DeleteNotificationCommand, ServiceResponse>
     {
         private readonly AppDbContext _appDbContext;
         private readonly ILogger<DeleteNotificationHandler> _logger;
@@ -18,14 +19,14 @@ namespace Infrastructure.Handlers.NotificationHandler
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
         {
             var notification = await _appDbContext.Notifications
                 .FirstOrDefaultAsync(n => n.Id == request.Id, cancellationToken);
 
             if (notification == null)
             {
-                throw new InvalidOperationException($"Notification with ID {request.Id} not found.");
+                return new ServiceResponse(true, "Уведомление не найдено");
             }
 
             notification.Status = (short)Status.Deleted;
@@ -33,7 +34,9 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Deleted notification with ID: {NotificationId}", request.Id);
+            _logger.LogInformation("Уведомление с ID: {NotificationId} успешно удалено", request.Id);
+
+            return new ServiceResponse(true, "Уведомление успешно удалено");
 
         }
     }

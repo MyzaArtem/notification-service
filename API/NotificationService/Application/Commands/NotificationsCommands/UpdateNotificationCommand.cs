@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Commands.NotificationsCommands
 {
-    public class UpdateNotificationCommand(NotificationUpdateDto? notification) : IRequest<Guid>
+    public class UpdateNotificationCommand(NotificationUpdateDto? notification) : IRequest<ServiceResponse>
     {
         public NotificationUpdateDto? Notification { get; } = notification;
     }
