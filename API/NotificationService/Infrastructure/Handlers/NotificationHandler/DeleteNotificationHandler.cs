@@ -25,7 +25,7 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             if (notification == null)
             {
-                throw new InvalidOperationException($"Notification with ID {request.Id} not found.");
+                throw new InvalidOperationException($"Уведомление с ID {request.Id} не найдено.");
             }
 
             notification.Status = (short)Status.Deleted;
@@ -33,7 +33,7 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Deleted notification with ID: {NotificationId}", request.Id);
+            _logger.LogInformation("Уведомление с ID: {NotificationId} успешно удалено", request.Id);
 
         }
     }

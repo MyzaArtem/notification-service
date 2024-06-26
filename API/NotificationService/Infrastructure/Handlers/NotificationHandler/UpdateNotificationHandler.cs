@@ -29,7 +29,7 @@ namespace Infrastructure.Handlers.NotificationHandler
 
             if (notification == null)
             {
-                throw new InvalidOperationException($"Notification with ID {request.Notification.Id} not found.");
+                throw new InvalidOperationException($"Уведомление с ID:  {request.Notification.Id} не найдено.");
             }
 
             notification.Title = request.Notification.Title;
@@ -39,7 +39,7 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext.Notifications.Update(notification);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Updated notification with ID: {NotificationId}", notification.Id);
+            _logger.LogInformation("Уведомление с ID: {NotificationId} успешно обновлено", notification.Id);
 
             return notification.Id;
         }
