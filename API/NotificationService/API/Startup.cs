@@ -5,6 +5,7 @@ using Infrastructure.Implemenation;
 using Domain.Models;
 using Infrastructure.Handlers.NotificationHandler;
 using API.Hubs;
+using Infrastructure.Services;
 
 namespace API
 {
@@ -50,8 +51,12 @@ namespace API
                         .WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
+                        .SetIsOriginAllowed((host) => true) // Allow any origin;
                         .AllowCredentials());
             });
+
+            services.Configure<RabbitMQOptions>(Configuration.GetSection("RabbitMQ"));
+            services.AddHostedService<RabbitMQService>();
 
             services.AddControllers();
 
@@ -79,6 +84,8 @@ namespace API
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {

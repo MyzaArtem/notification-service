@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SignalRService } from '../../../services/signalr.service';
-import { MyNotification } from 'apps/host/src/models/notifications/notifications';
+import { MyNotification } from '../../../models/notifications/notifications';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-notification-list',
@@ -8,18 +9,13 @@ import { MyNotification } from 'apps/host/src/models/notifications/notifications
   styleUrls: ['./notification-list.component.css']
 })
 export class NotificationListComponent implements OnInit {
-  notifications: MyNotification[] = [];
-  unreadCount = 0;
+  newNotifications$!: Observable<MyNotification[]>;
+  unreadCount$!: Observable<number>;
 
   constructor(private notificationService: SignalRService) {}
 
   ngOnInit() {
-    this.notificationService.newNotifications$.subscribe(notifications => {
-      this.notifications = notifications;
-    });
-
-    this.notificationService.unreadCount$.subscribe(count => {
-      this.unreadCount = count;
-    });
+    this.newNotifications$ = this.notificationService.newNotifications$;
+    this.unreadCount$ = this.notificationService.unreadCount$;
   }
 }

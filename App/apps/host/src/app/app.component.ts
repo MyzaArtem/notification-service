@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {Subscription, BehaviorSubject, firstValueFrom} from 'rxjs';
 import {NavigationEnd, Router} from '@angular/router';
 import {DrawerItemExpandedFn, DrawerSelectEvent} from '@progress/kendo-angular-layout';
 import {BreadCrumbCollapseMode} from '@progress/kendo-angular-navigation';
@@ -20,6 +20,9 @@ import {PersonService} from '../services/lkperson.service';
 import {PublicationsBadgeService} from 'common';
 import {SummCommentsStatusesService} from 'common';
 import {environment} from '../environments/environment';
+
+import { SignalRService } from '../services/signalr.service'
+import { MyNotification } from '../models/notifications/notifications';
 
 const menuExpanded = 'menuExpanded';
 
@@ -112,6 +115,8 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
+
+
   constructor(
     private router: Router,
     private cdRef: ChangeDetectorRef,
@@ -124,7 +129,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private personService: PersonService,
     private summCommentsStatusesService: SummCommentsStatusesService,
 
-    private signalRService: RealtimeClientService
+    private signalRService: SignalRService
   ) {
     this.routesData = this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -221,7 +226,9 @@ export class AppComponent implements OnInit, OnDestroy {
     
     const switchUser = localStorage.getItem('switchPerson');
     if (switchUser === 'true') this.isSwitchActive = true;
-    this.cdRef.detectChanges();    
+    this.cdRef.detectChanges();  
+    
+    this.signalRService.startConnection(); //позже переместить
   }
 
   public getCurrentPerson() {

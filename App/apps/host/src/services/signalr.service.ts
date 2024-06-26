@@ -1,33 +1,36 @@
 import { MyNotification } from '../models/notifications/notifications';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import {Observable, Subject} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
-  private hubConnection?: signalR.HubConnection;
-  private pendingNotificationUpdatedSubject = new Subject<MyNotification[]>();
-  notificationsUpdated$: Observable<MyNotification[]> = this.pendingNotificationUpdatedSubject.asObservable();
+  private hubConnection: signalR.HubConnection;
+  private newNotificationsSource = new BehaviorSubject<MyNotification[]>([]);
+  private unreadCountSource = new BehaviorSubject<number>(0);
 
-  private pendingCountNotificationsUpdatedSubject = new Subject<number>();
-  countNotificationsUpdated$: Observable<number> = this.pendingCountNotificationsUpdatedSubject.asObservable();
+  newNotifications$ = this.newNotificationsSource.asObservable();
+  unreadCount$ = this.unreadCountSource.asObservable();
 
   constructor() {
-
-  }
-
-  connect(){
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:8080/hubs/notifications', {
-        withCredentials: sessionStorage.getItem('token') != null,
-        accessTokenFactory: () => {
-          const token = sessionStorage.getItem('token');
-            return token ?? '';
-        },
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,})
+      .withUrl('https://localhost:8080/hubs/notifications'
+        , {
+          skipNegotiation: true,
+          transport: signalR.HttpTransportType.WebSockets
+        }
+        // , {
+        // withCredentials: sessionStorage.getItem('token') != null,
+        // accessTokenFactory: () => {
+        //   const token = sessionStorage.getItem('token');
+        //     return token ?? '';
+        // },
+        // skipNegotiation: true,
+        // transport: signalR.HttpTransportType.WebSockets,}
+      )
+      .configureLogging(signalR.LogLevel.Information)
       .build();
 
     this.hubConnection
@@ -36,16 +39,24 @@ export class SignalRService {
       .catch(err => console.error('Error connecting to SignalR hub:', err));
 
     this.hubConnection.on('ReceiveNewNotifications', (orders: MyNotification[]) => {
-      this.pendingNotificationUpdatedSubject.next(orders);
+      this.newNotificationsSource.next(orders);
     });
 
     this.hubConnection.on('ReceiveUnreadNotificationCount', (count: number) => {
-        this.pendingCountNotificationsUpdatedSubject.next(count);
+        this.unreadCountSource.next(count);
       });
+
+    this.startConnection();
+  }
+
+  public startConnection() {
+    this.hubConnection
+      .start()
+      .then(() => console.log('Connection started'))
+      .catch(err => console.log('Error while starting connection: ' + err));
   }
 
   async updateUnreadNotificationCount(userId: string, count: number) {
     await this.hubConnection?.invoke('SendUnreadNotificationCount', userId, count);
   }
-
 }

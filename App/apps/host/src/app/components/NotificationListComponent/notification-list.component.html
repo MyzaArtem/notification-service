@@ -1,7 +1,7 @@
 <div>
-    <h3>Notifications (Unread: {{ unreadCount }})</h3>
+    <p *ngIf="(unreadCount$ | async) as unreadCount">Unread notifications: {{ unreadCount }}</p>
     <ul>
-      <li *ngFor="let notification of notifications">
+      <li *ngFor="let notification of (newNotifications$ | async)">
         <strong>{{ notification.title }}</strong>: {{ notification.message }} ({{ notification.createdAt | date:'short' }})
       </li>
     </ul>
