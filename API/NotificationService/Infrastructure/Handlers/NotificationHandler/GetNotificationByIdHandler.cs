@@ -3,6 +3,7 @@ using MediatR;
 using Domain.Models;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Domain.Enums;
 
 namespace Infrastructure.Handlers.NotificationHandler
 {
@@ -14,6 +15,6 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext = appDbContext;
         }
         public async Task<Notification> Handle(GetNotificationByIdQuery request, CancellationToken cancellationToken)
-             => await _appDbContext.Notifications.FirstOrDefaultAsync(x => x.Id == request.Id && x.Status != -1, cancellationToken);
+             => await _appDbContext.Notifications.FirstOrDefaultAsync(x => x.Id == request.Id && x.Status != (short)Status.Deleted, cancellationToken);
     }
 }

@@ -129,7 +129,7 @@ namespace API.Controllers
         /// Обновляет существующее уведомление.
         /// </summary>
         /// <param name="notificationUpdateDto">DTO с обновленными деталями уведомления.</param>
-        /// <returns>ID обновленного уведомления.</returns>
+        /// <returns>Ответ с флагом и сообщением.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateNotification(NotificationUpdateDto notificationUpdateDto)
         {
@@ -150,7 +150,7 @@ namespace API.Controllers
         /// Удаляет уведомление по его ID.
         /// </summary>
         /// <param name="id">ID удаляемого уведомления.</param>
-        /// <returns>Результат выполнения действия.</returns>
+        /// <returns>Ответ с флагом и сообщением.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNotification(Guid id)
         {
