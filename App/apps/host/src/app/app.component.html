@@ -51,9 +51,7 @@
   </button>
 </kendo-appbar>
 
-<kendo-drawer-container *ngIf="isNotificationOpened" class="notifications">
-  <app-notification-dialog></app-notification-dialog>
-</kendo-drawer-container>
+<app-notification-dialog *ngIf="isNotificationOpened" class="notifications"></app-notification-dialog>
 
 <kendo-drawer-container *ngIf="!isNotificationOpened">
   <kendo-drawer

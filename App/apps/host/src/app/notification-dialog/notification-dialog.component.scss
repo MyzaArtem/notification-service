@@ -139,12 +139,6 @@
   height: 100%;
 }
 
-.messages {
-  width: auto;
-  background-color: #82C659;
-  height: 100%;
-}
-
 .senders-list {
   width: 400px;
   height: 850px;
@@ -196,5 +190,49 @@
 }
 
 .count {
+
+}
+
+.messages {
+  background-color: #EEEEEE;
+  height: 950px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 1520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  width: auto;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.message-sender {
+
+}
+
+.message-data {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-image: url("../../assets/horse.jpg");
+}
+
+.message-text {
+  background-color: #6F6F6F;
+  border-radius: 5%;
+  width: auto;
+}
+
+.message-date {
 
 }
