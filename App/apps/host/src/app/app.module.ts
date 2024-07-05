@@ -17,11 +17,18 @@ import {CallBackComponent} from './auth/callback.component';
 import {LoginpageComponent} from './auth/loginpage.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {PlaceholderComponent} from './placeholder/placeholder';
+import {NotificationDialogComponent} from './notification-dialog/notification-dialog.component';
 
 registerLocaleData(localeRu);
 
 @NgModule({
-  declarations: [AppComponent, CallBackComponent, LoginpageComponent, PlaceholderComponent],
+  declarations: [
+    AppComponent,
+    CallBackComponent,
+    LoginpageComponent,
+    PlaceholderComponent,
+    NotificationDialogComponent,
+  ],
   imports: [
     HttpClientModule,
     BrowserModule,

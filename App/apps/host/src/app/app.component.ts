@@ -20,6 +20,7 @@ import {PersonService} from '../services/lkperson.service';
 import {PublicationsBadgeService} from 'common';
 import {SummCommentsStatusesService} from 'common';
 import {environment} from '../environments/environment';
+//import {NotificationDialogComponent} from './notification-dialog/notification-dialog.component';
 
 const menuExpanded = 'menuExpanded';
 
@@ -30,6 +31,8 @@ const menuExpanded = 'menuExpanded';
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, OnDestroy {
+  public isNotificationOpened = false;
+
   public fullTitle = environment.headerTitle.full;
   public shortTitle = environment.headerTitle.short;
 
@@ -298,6 +301,6 @@ export class AppComponent implements OnInit, OnDestroy {
   };
 
   public openNotificationWindow() {
-    
+    this.isNotificationOpened = !this.isNotificationOpened;
   }
 }

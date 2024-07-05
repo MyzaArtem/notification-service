@@ -31,7 +31,7 @@
         </ng-template>
       </kendo-menu-item>
       <kendo-menu-item [cssStyle]="{ color: '#42A7DD' }" text="logout"  icon="logout">
-        <ng-template kendoMenuItemTemplate let-item="item"> 
+        <ng-template kendoMenuItemTemplate let-item="item">
           <div class="menu-item" (click)="logOut()">
             <h2 class="menu-title">Выход</h2>
           </div>
@@ -39,8 +39,8 @@
       </kendo-menu-item>
     </kendo-menu-item>
   </kendo-menu>
-  <button 
-    kendoButton 
+  <button
+    kendoButton
     class="notification-btn"
     icon="bell"
     rounded="large"
@@ -50,7 +50,12 @@
   >
   </button>
 </kendo-appbar>
-<kendo-drawer-container>
+
+<kendo-drawer-container *ngIf="isNotificationOpened" class="notifications">
+  <app-notification-dialog></app-notification-dialog>
+</kendo-drawer-container>
+
+<kendo-drawer-container *ngIf="!isNotificationOpened">
   <kendo-drawer
     #drawer
     [items]="items"
