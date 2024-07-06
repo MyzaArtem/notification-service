@@ -1,6 +1,6 @@
-
 @import "@progress/kendo-theme-default";
 
+/* Styles for .window */
 .window {
   display: flex;
   flex-direction: column;
@@ -11,6 +11,7 @@
   height: auto;
 }
 
+/* Styles for .header */
 .header {
   display: flex;
   height: 60px;
@@ -22,6 +23,7 @@
   width: 100%;
 }
 
+/* Styles for .text */
 .text {
   color: #FFF;
   font-feature-settings: 'clig' off, 'liga' off;
@@ -32,17 +34,36 @@
   line-height: 150%;
 }
 
+/* Styles for .close-button */
 .close-button {
   width: 38px;
   height: 38px;
 }
 
+/* Styles for .main */
+.main {
+  display: flex;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  justify-content: start;
+}
+
+/* Styles for .senders */
+.senders {
+  width: 400px;
+  height: 100%;
+  background-color: white;
+}
+
+/* Styles for .buttons-and-search */
 .buttons-and-search {
   align-items: center;
   justify-content: center;
-  background-color: #EEEEEE;
+  background-color: white;
 }
 
+/* Styles for .buttons */
 .buttons {
   display: flex;
   width: 380px;
@@ -55,15 +76,37 @@
   height: 38px;
 }
 
-.button-recent, .button-read, .button-all {
+/* Styles for .button-recent */
+.button-recent {
   height: 38px;
   padding: 10px 0;
   width: 135px;
   background-color: #DEE2E6;
-  border: 1px solid black;
+  border: 0.5px solid black;
   border-radius: 5px;
 }
 
+/* Styles for .button-read */
+.button-read {
+  height: 38px;
+  padding: 10px 0;
+  width: 135px;
+  background-color: #DEE2E6;
+  border: 0.5px solid black;
+  border-radius: 5px;
+}
+
+/* Styles for .button-all */
+.button-all {
+  height: 38px;
+  padding: 10px 0;
+  width: 135px;
+  background-color: #DEE2E6;
+  border: 0.5px solid black;
+  border-radius: 5px;
+}
+
+/* Styles for .search */
 .search {
   height: 38px;
   width: 400px;
@@ -73,6 +116,7 @@
   margin: auto auto auto 5px;
 }
 
+/* Styles for .search-input */
 .search-input {
   border-radius: 5px;
   height: 36px;
@@ -80,36 +124,74 @@
   border: 1px solid black;
 }
 
-.search-cancel, .search-filter {
+/* Styles for .search-cancel */
+.search-cancel {
   border-radius: 5px;
   width: 36px;
   height: 36px;
-  background-color: #EEEEEE;
   border: 0;
 }
 
-.main {
-  display: flex;
-  align-items: flex-start;
-  flex: 1 0 0;
-  align-self: stretch;
-  justify-content: start;
+/* Styles for .search-filter */
+.search-filter {
+  border-radius: 5px;
+  width: 36px;
+  height: 36px;
+  border: 0;
 }
 
-.senders {
-  width: 400px;
-  height: 100%;
-}
-
+/* Styles for .senders-list */
 .senders-list {
   width: 400px;
   height: 850px;
   overflow-y: scroll;
   overflow-x: hidden;
+  background-color: white;
 }
 
+/* Styles for .sender */
+.sender {
+  margin: 5px;
+  width: 384px;
+  height: 74px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+}
+
+.sender:hover {
+  background-color: lightblue;
+}
+
+/* Styles for .avatar */
+.avatar {
+  width: 64px;
+  height: 64px;
+  background-image: url("../../assets/horse.jpg");
+  border-radius: 50%;
+}
+
+/* Styles for .tittle-and-message */
+.tittle-and-message {
+  display: flex;
+  flex-direction: column;
+  width: 257px;
+  height: 64px;
+  justify-content: start;
+}
+
+/* Styles for .data-and-count */
+.data-and-count {
+  width: 22px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for .messages */
 .messages {
-  background-color: #EEEEEE;
+  background-color: white;
   height: 950px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -118,6 +200,13 @@
   flex-direction: column;
 }
 
+/* Styles for .messages-container */
+.messages-container {
+  height: 880px;
+  width: 1520px;
+}
+
+/* Styles for .message */
 .message {
   width: 100%;
   display: flex;
@@ -128,12 +217,7 @@
   padding: 5px;
 }
 
-.message-data {
-  display: flex;
-  justify-content: start;
-  flex-direction: column;
-}
-
+/* Styles for .message-avatar */
 .message-avatar {
   width: 32px;
   height: 32px;
@@ -142,20 +226,24 @@
   margin: 0 10px 0 0;
 }
 
+/* Styles for .message-data */
+.message-data {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+
+/* Styles for .message-text */
 .message-text {
-  background-color: #6F6F6F;
+  background-color: #E9ECEF;
   border-radius: 12px 12px 12px 0;
   width: auto;
   padding: 10px;
   max-width: 1250px;
-  color: white;
+  color: black;
 }
 
-.messages-container {
-  height: 880px;
-  width: 1520px;
-}
-
+/* Styles for .messages-footer */
 .messages-footer {
   height: 70px;
   width: 1520px;
@@ -163,36 +251,8 @@
   justify-content: center;
 }
 
-.sender {
-  margin: 5px;
-  width: 384px;
-  height: 74px;
-  background-color: #EEEEEE;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: none;
+/* Styles for .message-date */
+.message-date {
+  font-size: 12px;
+  color: #999999;
 }
-
-.avatar {
-  width: 64px;
-  height: 64px;
-  background-image: url("../../assets/horse.jpg");
-  border-radius: 50%;
-}
-
-.tittle-and-message {
-  display: flex;
-  flex-direction: column;
-  width: 257px;
-  height: 64px;
-  justify-content: start;
-}
-
-.data-and-count {
-  width: 22px;
-  height: 64px;
-  display: flex;
-  flex-direction: column;
-}
-
