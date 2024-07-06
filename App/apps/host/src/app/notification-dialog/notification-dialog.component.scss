@@ -1,3 +1,6 @@
+
+@import "@progress/kendo-theme-default";
+
 .window {
   display: flex;
   flex-direction: column;
@@ -11,19 +14,12 @@
 .header {
   display: flex;
   height: 60px;
-  padding: 0 var(--kendo-spacing-25, 10px) 0px 25px;
+  padding: 0 10px 0 25px;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
   background-color: #2192CE;
   width: 100%;
-}
-
-.tittle {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: var(--kendo-spacing-25, 10px);
 }
 
 .text {
@@ -37,13 +33,8 @@
 }
 
 .close-button {
-  display: flex;
   width: 38px;
   height: 38px;
-  padding: var(--kendo-spacing-2, 8px);
-  justify-content: center;
-  align-items: center;
-  gap: var(--kendo-spacing-05, 2px);
 }
 
 .buttons-and-search {
@@ -64,21 +55,13 @@
   height: 38px;
 }
 
-.button-recent.button-all {
+.button-recent, .button-read, .button-all {
   height: 38px;
   padding: 10px 0;
   width: 135px;
   background-color: #DEE2E6;
-  border: 1px black;
+  border: 1px solid black;
   border-radius: 5px;
-}
-
-.button-read {
-  height: 38px;
-  padding: 10px 0;
-  width: 135px;
-  background-color: #DEE2E6;
-  border: 1px black;
 }
 
 .search {
@@ -94,24 +77,15 @@
   border-radius: 5px;
   height: 36px;
   width: 304px;
-  border: 1px black;
+  border: 1px solid black;
 }
 
-.search-cancel {
+.search-cancel, .search-filter {
   border-radius: 5px;
   width: 36px;
   height: 36px;
   background-color: #EEEEEE;
   border: 0;
-}
-
-.search-filter {
-  border-radius: 5px;
-  border: 2px blue;
-  margin: 5px 10px;
-  width: 38px;
-  height: 38px;
-  background-color: #EEEEEE;
 }
 
 .main {
@@ -120,18 +94,6 @@
   flex: 1 0 0;
   align-self: stretch;
   justify-content: start;
-}
-
-.menu {
-  display: flex;
-  width: 400px;
-  min-width: 400px;
-  max-width: 600px;
-  padding: var(--kendo-spacing-25, 10px) 0px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--kendo-spacing-25, 10px);
-  align-self: stretch;
 }
 
 .senders {
@@ -146,13 +108,70 @@
   overflow-x: hidden;
 }
 
+.messages {
+  background-color: #EEEEEE;
+  height: 950px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 1520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  min-height: 71px;
+  margin: 0 0 0 15px;
+  padding: 5px;
+}
+
+.message-data {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-image: url("../../assets/horse.jpg");
+  margin: 0 10px 0 0;
+}
+
+.message-text {
+  background-color: #6F6F6F;
+  border-radius: 12px 12px 12px 0;
+  width: auto;
+  padding: 10px;
+  max-width: 1250px;
+  color: white;
+}
+
+.messages-container {
+  height: 880px;
+  width: 1520px;
+}
+
+.messages-footer {
+  height: 70px;
+  width: 1520px;
+  text-align: center;
+  justify-content: center;
+}
+
 .sender {
+  margin: 5px;
   width: 384px;
   height: 74px;
   background-color: #EEEEEE;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: none;
 }
 
 .avatar {
@@ -170,14 +189,6 @@
   justify-content: start;
 }
 
-.tittle {
-
-}
-
-.last-message {
-
-}
-
 .data-and-count {
   width: 22px;
   height: 64px;
@@ -185,54 +196,3 @@
   flex-direction: column;
 }
 
-.data {
-
-}
-
-.count {
-
-}
-
-.messages {
-  background-color: #EEEEEE;
-  height: 950px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  width: 1520px;
-  display: flex;
-  flex-direction: column;
-}
-
-.message {
-  width: auto;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-}
-
-.message-sender {
-
-}
-
-.message-data {
-  display: flex;
-  justify-content: start;
-  flex-direction: column;
-}
-
-.message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-image: url("../../assets/horse.jpg");
-}
-
-.message-text {
-  background-color: #6F6F6F;
-  border-radius: 5%;
-  width: auto;
-}
-
-.message-date {
-
-}

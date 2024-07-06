@@ -13,6 +13,6 @@ export class NotificationDialogComponent {
 
   public messages = [
     { id: 1, from: 'John Doe', text: 'Hello!', timestamp: new Date() },
-    { id: 2, from: 'Jane Smith', text: 'Hi there!', timestamp: new Date() },
+    { id: 2, from: 'Jane Smith', text: 'Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there!  Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! Hi there! ', timestamp: new Date() },
   ];
 }
