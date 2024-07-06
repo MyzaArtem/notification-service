@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Queries.NotificationsQuery;
 using Application.Commands.NotificationsCommands;
+using System.Reflection;
 
 namespace API.Controllers
 {
@@ -31,11 +32,48 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Получает уведомления для конкретного пользователя с возможностью пагинации.
+        /// </summary>
+        /// <param name="userId">ID пользователя.</param>
+        /// <param name="page">Номер страницы для пагинации (по умолчанию 1).</param>
+        /// <param name="pageSize">Размер страницы для пагинации (по умолчанию 10).</param>
+        /// <returns>Список уведомлений для пользователя с учетом пагинации.</returns>
+        [HttpGet("foruser/{userId}", Name = "GetNotificationsForUser")]
+        public async Task<ActionResult<IEnumerable<NotificationReadDto>>> GetNotificationsForUser(
+            Guid userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                _logger.LogInformation($"Получение уведомлений для пользователя с ID: {userId}");
+                var notifications = await _mediator.Send(new GetNotificationsForUserQuery(userId, page, pageSize));
+                if (notifications == null)
+                {
+                    _logger.LogWarning($"Уведомления не найдены для пользователя с ID: {userId}");
+                    return NotFound();
+                }
+                /*var notificationDtos = _mapper.Map<List<NotificationReadDto>>(notifications.Items);
+                var pagedResult = new PagedResult<NotificationReadDto>(notificationDtos, notifications.TotalCount, page, pageSize);*/
+
+                return Ok(notifications);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogError($"Неверный ID пользователя: {ex.Message}");
+                return BadRequest("Неверный ID пользователя");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Внутренняя ошибка сервера: {ex.Message}");
+                return StatusCode(500, "Внутренняя ошибка сервера");
+            }
+        }
+
+        /// <summary>
         /// Получает все уведомления для конкретного пользователя.
         /// </summary>
         /// <param name="userId">ID пользователя.</param>
         /// <returns>Список уведомлений для пользователя.</returns>
-        [HttpGet("foruser/{userId}", Name = "GetAllNotificationsForUser")]
+        [HttpGet("allforuser/{userId}", Name = "GetAllNotificationsForUser")]
         public async Task<ActionResult<IEnumerable<NotificationReadDto>>> GetAllNotificationsForUser(Guid userId)
         {
             try
