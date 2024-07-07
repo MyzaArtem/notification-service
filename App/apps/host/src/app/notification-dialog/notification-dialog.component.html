@@ -1,0 +1,50 @@
+<div class="window">
+  <div class="header">
+    <div class="text">Уведомления</div>
+    <button kendoButton icon="close" class="close-button"></button>
+  </div>
+  <div class="main">
+    <div class="senders">
+      <div class="buttons-and-search">
+        <div class="buttons">
+          <button kendoButton class="button-recent">Недавние</button>
+          <button kendoButton class="button-read">Прочитанные</button>
+          <button kendoButton class="button-all">Все</button>
+        </div>
+        <div class="search">
+          <input kendoTextBox type="text" class="search-input" placeholder="Поиск уведомлений">
+          <button kendoButton icon="close" class="search-cancel"></button>
+          <button kendoButton icon="filter" class="search-filter"></button>
+        </div>
+      </div>
+      <p *ngIf="people.length === 0">Нет отправителей</p>
+      <div class="senders-list">
+        <div *ngFor="let person of people" class="sender">
+          <div class="avatar"></div>
+          <div class="tittle-and-message">
+            <div class="tittle">{{ person.name }}</div>
+            <div class="last-message">Сообщение от {{ person.name }}</div>
+          </div>
+          <div class="data-and-count">
+            <div class="data">пт</div>
+            <div class="count">12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="messages">
+      <p *ngIf="messages.length === 0">Нет отправителей</p>
+      <div class="messages-container">
+        <div *ngFor="let message of messages" class="message">
+          <div class="message-avatar"></div>
+          <div class="message-data">
+            <div class="message-sender">{{ message.from }}</div>
+            <div class="message-text">{{ message.text }}</div>
+          </div>
+          <div class="message-date">{{ message.timestamp | date:'dd.MM.yyyy' }}</div>
+        </div>
+      </div>
+      <div class="messages-footer">Вы прочитали все сообщения</div>
+    </div>
+  </div>
+</div>

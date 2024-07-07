@@ -1,0 +1,292 @@
+@import "@progress/kendo-theme-default";
+
+/* Styles for .window */
+.window {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  width: 100vw;
+  height: auto;
+}
+
+/* Styles for .header */
+.header {
+  display: flex;
+  height: 60px;
+  padding: 0 10px 0 25px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  background-color: #2192CE;
+  width: 100%;
+}
+
+/* Styles for .text */
+.text {
+  color: #FFF;
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Montserrat;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+/* Styles for .close-button */
+.close-button {
+  width: 38px;
+  height: 38px;
+  background-color: #2192CE;
+  border: 0;
+  box-shadow: none;
+}
+
+.close-button:active {
+  background-color: #2192CE;
+  box-shadow: none;
+}
+
+.close-button:focus {
+  outline: none;
+  background-color: #2192CE;
+  box-shadow: none;
+}
+
+/* Styles for .main */
+.main {
+  display: flex;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  justify-content: start;
+}
+
+/* Styles for .senders */
+.senders {
+  width: 400px;
+  height: 100%;
+  background-color: white;
+}
+
+/* Styles for .buttons-and-search */
+.buttons-and-search {
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+/* Стили для кнопок контейнера */
+/* Стили для кнопок-контейнера */
+.buttons {
+  display: flex;
+  width: 380px;
+  background-color: #DEE2E6;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 5px; /* Скругленные углы для контейнера */
+  text-align: center;
+  margin: 5px auto;
+  height: 38px;
+}
+
+.button-recent,
+.button-read,
+.button-all {
+  height: 38px;
+  padding: 10px 0;
+  width: 135px;
+  background-color: #DEE2E6;
+  border: none;
+  color: black;
+  font-family: Montserrat;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-recent {
+  border-radius: 5px 0 0 5px;
+  box-shadow: none;
+}
+
+.button-read {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.button-all {
+  border-radius: 0 5px 5px 0;
+  box-shadow: none;
+}
+
+.button-recent:hover,
+.button-read:hover,
+.button-all:hover {
+  background-color: #2192CE;
+  color: white;
+}
+
+.button-recent:active,
+.button-read:active,
+.button-all:active {
+  background-color: #0033aa;
+  color: white;
+}
+
+/* Styles for .search */
+.search {
+  height: 38px;
+  width: 400px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: auto auto auto 5px;
+}
+
+/* Styles for .search-input */
+.search-input {
+  border-radius: 5px;
+  height: 36px;
+  width: 304px;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Styles for .search-cancel */
+.search-cancel {
+  border-radius: 5px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  box-shadow: none;
+  background-color: white;
+}
+
+/* Styles for .search-filter */
+.search-filter {
+  border-radius: 5px;
+  width: 36px;
+  height: 36px;
+  border: 1px #2192CE;
+  background-color: white;
+  box-shadow: none;
+}
+
+/* Styles for .senders-list */
+.senders-list {
+  width: 400px;
+  height: 850px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: white;
+}
+
+/* Styles for .sender */
+.sender {
+  margin: 5px;
+  width: 384px;
+  height: 74px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+}
+
+.sender:hover {
+  background-color: lightblue;
+}
+
+/* Styles for .avatar */
+.avatar {
+  width: 64px;
+  height: 64px;
+  background-image: url("../../assets/horse.jpg");
+  border-radius: 50%;
+}
+
+/* Styles for .tittle-and-message */
+.tittle-and-message {
+  display: flex;
+  flex-direction: column;
+  width: 257px;
+  height: 64px;
+  justify-content: start;
+}
+
+/* Styles for .data-and-count */
+.data-and-count {
+  width: 22px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for .messages */
+.messages {
+  background-color: white;
+  height: 950px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 1520px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for .messages-container */
+.messages-container {
+  height: 880px;
+  width: 1520px;
+}
+
+/* Styles for .message */
+.message {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  min-height: 71px;
+  margin: 0 0 0 15px;
+  padding: 5px;
+}
+
+/* Styles for .message-avatar */
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-image: url("../../assets/horse.jpg");
+  margin: 0 10px 0 0;
+}
+
+/* Styles for .message-data */
+.message-data {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+
+/* Styles for .message-text */
+.message-text {
+  background-color: #E9ECEF;
+  border-radius: 12px 12px 12px 0;
+  width: auto;
+  padding: 10px;
+  max-width: 1250px;
+  color: black;
+}
+
+/* Styles for .messages-footer */
+.messages-footer {
+  height: 70px;
+  width: 1520px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Styles for .message-date */
+.message-date {
+  font-size: 12px;
+  color: #999999;
+}
