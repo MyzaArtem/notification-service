@@ -3,10 +3,11 @@ using MassTransit;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Application.DTOs;
 
 namespace Infrastructure.Consumers;
 
-public class DeleteNotificationConsumer : IConsumer<DeleteNotification>
+public class DeleteNotificationConsumer : IConsumer<DeleteNotificationDto>
 {
     private readonly ILogger<DeleteNotificationConsumer> _logger;
     private readonly IMediator _mediator;
@@ -17,7 +18,7 @@ public class DeleteNotificationConsumer : IConsumer<DeleteNotification>
         _mediator = mediator;
     }
 
-    public async Task Consume(ConsumeContext<DeleteNotification> context)
+    public async Task Consume(ConsumeContext<DeleteNotificationDto> context)
     {
         /* Example?
            {

@@ -36,7 +36,7 @@ namespace API
 
                     x.UsingRabbitMq((context, cfg) =>
                     {
-                        cfg.Host("rabbitmq://localhost", c =>
+                        cfg.Host("rabbitmq", c =>
                         {
                             c.Username("guest");
                             c.Password("guest");

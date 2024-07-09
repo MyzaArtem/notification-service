@@ -136,35 +136,42 @@ namespace Infrastructure.Data
                 },
             };
 
-
-            foreach (var category in categories)
+            try
             {
-                await categoryRepo.CreateAsync(category);
+
+                foreach (var category in categories)
+                {
+                    await categoryRepo.CreateAsync(category);
+                }
+
+                foreach (var service in services)
+                {
+                    await serviceRepo.CreateAsync(service);
+                }
+
+                foreach (var type in types)
+                {
+                    await typeRepo.CreateAsync(type);
+                }
+
+                foreach (var user in users)
+                {
+                    await userRepo.CreateAsync(user);
+                }
+
+                foreach (var setting in settings)
+                {
+                    await settingRepo.CreateAsync(setting);
+                }
+
+                foreach (var notification in notifications)
+                {
+                    await notificationRepo.CreateAsync(notification);
+                }
             }
-
-            foreach (var service in services)
+            catch (Exception ex)
             {
-                await serviceRepo.CreateAsync(service);
-            }
-
-            foreach (var type in types)
-            {
-                await typeRepo.CreateAsync(type);
-            }
-
-            foreach (var user in users)
-            {
-                await userRepo.CreateAsync(user);
-            }
-
-            foreach (var setting in settings)
-            {
-                await settingRepo.CreateAsync(setting);
-            }
-
-            foreach (var notification in notifications)
-            {
-                await notificationRepo.CreateAsync(notification);
+                Console.WriteLine(ex.Message);
             }
         }
     }
