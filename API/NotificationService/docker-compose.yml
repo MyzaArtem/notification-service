@@ -1,5 +1,6 @@
 version: '3.9'
 
+
 services:
   api:
     image: ${DOCKER_REGISTRY-}api
@@ -14,6 +15,9 @@ services:
       - ConnectionStrings__DefaultConnection=Host=db;Database=notifications;Username=postgres;Password=postgres
     depends_on:
       - db
+    networks:
+      - dockerapi
+
 
   db:
     image: postgres:latest  
@@ -23,6 +27,19 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - 5432:5432
+    networks:
+      - dockerapi
+
+
+  lk-person:
+    container_name: lk-person
+    build:
+      context: ../../App/
+      dockerfile: /Dockerfile
+    ports:
+      - "8451:80"
+    networks:
+      - dockerapi
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -36,3 +53,10 @@ services:
     ports:
       - "15672:15672" # Management plugin port
       - "5672:5672"   # RabbitMQ port
+    networks:
+      - dockerapi
+
+networks:
+  dockerapi:
+    driver: bridge
+
