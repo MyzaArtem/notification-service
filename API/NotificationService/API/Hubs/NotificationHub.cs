@@ -27,7 +27,7 @@ namespace API.Hubs
         {
             //await Clients.User(userId).SendAsync("ReceiveNewNotifications", notifications);
             var result = new List<Notification>();
-            await Clients.All.SendAsync("ReceiveNewNotifications", result);
+            await Clients.All.SendAsync("ReceiveNewNotifications", userId, result);
         }
 
         public async Task SendUnreadNotificationCount(string userId, int count)

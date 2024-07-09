@@ -228,7 +228,6 @@ export class AppComponent implements OnInit, OnDestroy {
     if (switchUser === 'true') this.isSwitchActive = true;
     this.cdRef.detectChanges();  
     
-    this.signalRService.startConnection(); //позже переместить
   }
 
   public getCurrentPerson() {

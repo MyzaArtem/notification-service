@@ -43,10 +43,11 @@ namespace API
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(UpdateNotificationHandler).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DeleteNotificationHandler).Assembly));
 
+            //header
             services.AddSignalR();
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigins",
+                options.AddPolicy("CorsPolicy",
                     builder => builder
                         .WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()
@@ -54,6 +55,13 @@ namespace API
                         .SetIsOriginAllowed((host) => true) // Allow any origin;
                         .AllowCredentials());
             });
+
+            /*services.AddCors(options => options.AddPolicy(
+            name: "GlobalAllowCorsPolicy",
+            policy => policy
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin()));*/
 
             services.Configure<RabbitMQOptions>(Configuration.GetSection("RabbitMQ"));
             services.AddHostedService<RabbitMQService>();
@@ -78,6 +86,7 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommandsService v1"));
             }
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
@@ -85,7 +94,6 @@ namespace API
 
             app.UseAuthorization();
 
-            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {

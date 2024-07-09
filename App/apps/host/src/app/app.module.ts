@@ -18,6 +18,9 @@ import {LoginpageComponent} from './auth/loginpage.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {PlaceholderComponent} from './placeholder/placeholder';
 
+import { SignalRService } from '../services/signalr.service';
+import { NotificationModule } from './components/NotificationListComponent/notification.module';
+
 registerLocaleData(localeRu);
 
 @NgModule({
@@ -36,6 +39,7 @@ registerLocaleData(localeRu);
         deps: [TokenStorageService],
       },
     }),
+    NotificationModule,
   ],
   providers: [
     {
@@ -44,6 +48,7 @@ registerLocaleData(localeRu);
       useValue: 'ru',
     },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    SignalRService,
   ],
   bootstrap: [AppComponent],
 })

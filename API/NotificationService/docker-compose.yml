@@ -7,11 +7,12 @@ services:
       context: .
       dockerfile: API/Dockerfile
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "8080:80"  # HTTP port
+      - "8443:443" # HTTPS port
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Database=notifications;Username=postgres;Password=postgres
+      #- ASPNETCORE_URLS=https://+:443;http://+:80
     depends_on:
       - db
 
@@ -38,3 +39,16 @@ services:
     ports:
       - "15672:15672" # Management plugin port
       - "5672:5672"   # RabbitMQ port
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ../../App/Dockerfile
+    ports:
+      - "4200:80" # Пробрасываем порт, который будет доступен для микрофронта 1
+    environment:
+      - NX_DAEMON=false
+    volumes:
+      - .:/app
+    command: ["npx", "nx", "serve", "host", "--host", "0.0.0.0"]
+    
