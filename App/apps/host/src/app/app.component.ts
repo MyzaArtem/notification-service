@@ -20,6 +20,7 @@ import {PersonService} from '../services/lkperson.service';
 import {PublicationsBadgeService} from 'common';
 import {SummCommentsStatusesService} from 'common';
 import {environment} from '../environments/environment';
+import { SignalRService } from '../services/signalr.service';
 //import {NotificationDialogComponent} from './notification-dialog/notification-dialog.component';
 
 const menuExpanded = 'menuExpanded';
@@ -125,7 +126,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private alertStatisticsServise: AlertStatisticsService,
     private notificationService: PublicationsBadgeService,
     private personService: PersonService,
-    private summCommentsStatusesService: SummCommentsStatusesService
+    private summCommentsStatusesService: SummCommentsStatusesService,
+
+    public signalrService: SignalRService
   ) {
     this.routesData = this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -223,6 +226,13 @@ export class AppComponent implements OnInit, OnDestroy {
     const switchUser = localStorage.getItem('switchPerson');
     if (switchUser === 'true') this.isSwitchActive = true;
     this.cdRef.detectChanges();
+
+    this.signalrService.startConnection();
+
+    setTimeout(() => {
+      this.signalrService.askServer(this.person.personExternalId);
+      this.signalrService.askServerListener();
+    }, 2000);
   }
 
   public getCurrentPerson() {
@@ -256,6 +266,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.routesData.unsubscribe();
+
+    this.signalrService.hubConnection.off('ReceiveUnreadNotificationCount');
   }
 
   private initRoutes() {

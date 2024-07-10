@@ -1,4 +1,5 @@
 ﻿using API.Extensions;
+using API.Hubs;
 using Application.Interfaces;
 using Domain.Models;
 using Infrastructure.Consumers;
@@ -27,46 +28,7 @@ namespace API
                 .AddMediatRHandlers()
                 .AddSwaggerConfiguration()
                 .AddCustomServices()
-                .AddMassTransit(x =>
-                {
-                    x.AddConsumer<CreateNotificationConsumer>();
-                    x.AddConsumer<DeleteNotificationConsumer>();
-                    x.AddConsumer<UserConsumer>();
-                    x.AddConsumer<ServiceConsumer>();
-
-                    x.UsingRabbitMq((context, cfg) =>
-                    {
-                        cfg.Host("rabbitmq", c =>
-                        {
-                            c.Username("guest");
-                            c.Password("guest");
-                        });
-
-                        cfg.ReceiveEndpoint("CreateQueue", e =>
-                        {
-                            e.ConfigureConsumer<CreateNotificationConsumer>(context);
-                        });
-
-                        cfg.ReceiveEndpoint("DeleteQueue", e =>
-                        {
-                            e.ConfigureConsumer<DeleteNotificationConsumer>(context);
-                        });
-
-                        cfg.ReceiveEndpoint("UserQueue", e =>
-                        {
-                            e.ConfigureConsumer<UserConsumer>(context);
-                        });
-
-                        cfg.ReceiveEndpoint("ServiceQueue", e =>
-                        {
-                            e.ConfigureConsumer<ServiceConsumer>(context);
-                        });
-
-                        cfg.ClearSerialization();
-                        cfg.UseRawJsonSerializer();
-                        cfg.ConfigureEndpoints(context);
-                    });
-                });
+                .AddRabbitMQService();
         }
 
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,6 +41,7 @@ namespace API
             }
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -86,6 +49,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/notification-hub");
             });
 
             using (var serviceScope = app.ApplicationServices.CreateScope())
