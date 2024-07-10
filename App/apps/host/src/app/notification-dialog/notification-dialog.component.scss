@@ -177,16 +177,17 @@
 /* Styles for .senders-list */
 .senders-list {
   width: 400px;
-  height: 850px;
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: white;
+  padding-right: 15px;
 }
 
 /* Styles for .sender */
 .sender {
   margin: 5px;
-  width: 384px;
+  width: auto;
   height: 74px;
   display: flex;
   justify-content: space-between;
@@ -226,18 +227,21 @@
 /* Styles for .messages */
 .messages {
   background-color: white;
-  height: 950px;
+  height: 790px;
   overflow-y: scroll;
   overflow-x: hidden;
-  width: 1520px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+
 }
 
 /* Styles for .messages-container */
 .messages-container {
-  height: 880px;
-  width: 1520px;
+  height: auto;
+  width: 100%;
+  min-width: 360px;
+  padding-right: 15px;
 }
 
 /* Styles for .message */
@@ -258,6 +262,8 @@
   border-radius: 50%;
   background-image: url("../../assets/horse.jpg");
   margin: 0 10px 0 0;
+  background-size: cover;
+  flex-shrink: 0;
 }
 
 /* Styles for .message-data */
@@ -280,9 +286,10 @@
 /* Styles for .messages-footer */
 .messages-footer {
   height: 70px;
-  width: 1520px;
+  width: 100%;
   text-align: center;
   justify-content: center;
+  min-width: 360px;
 }
 
 /* Styles for .message-date */
