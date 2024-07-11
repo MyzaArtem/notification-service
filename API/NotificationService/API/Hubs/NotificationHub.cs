@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace API.Hubs
 {
@@ -21,28 +22,30 @@ namespace API.Hubs
             _logger = logger;
         }
 
-        public async Task SendNewNotifications(string userId)
+        /*public async Task SendNewNotifications(NotificationCreateDto notificationCreateDto)
         {
-            //await Clients.User(userId).SendAsync("ReceiveNewNotifications", notifications);
-            var result = new List<Notification>();
-            await Clients.Clients(this.Context.ConnectionId).SendAsync("ReceiveNewNotifications", userId, result);
-        }
+            string json = JsonConvert.SerializeObject(notificationCreateDto);
+            await Clients.Clients(Context.ConnectionId).SendAsync("ReceiveNewNotifications", notificationCreateDto.UserId.ToString(), json);
+        }*/
 
-        public async Task SendUnreadNotificationCount(string userId, int count = 0)
+        /*public async Task SendNewNotifications(string userId)
+        {
+            var notifications = new List<string> { "Notification 1", "Notification 2", "Notification 3" };
+            string json = JsonConvert.SerializeObject(notifications);
+            await Clients.Clients(Context.ConnectionId).SendAsync("ReceiveNewNotifications", userId, json);
+        }*/
+
+        public async Task SendUnreadNotificationCount(string userId)
         {
             int result;
             try
             {
-                _logger.LogInformation($"Fetching notifications for user with ID: {userId}", userId);
+                _logger.LogInformation($"Fetching notifications for user with ID: {userId}");
 
                 Guid GuidUserId;
                 Guid.TryParse(userId, out GuidUserId);
 
                 var notifications = await _mediator.Send(new GetCountUnreadNotificationsForUserQuery(GuidUserId));
-                if (notifications == null)
-                {
-                    notifications = 0;
-                }
 
                 result = notifications;
             }
@@ -56,20 +59,9 @@ namespace API.Hubs
                 _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return;
             }
-            await Clients.Clients(this.Context.ConnectionId).SendAsync("ReceiveUnreadNotificationCount", userId, result);
+            await Clients.Clients(Context.ConnectionId).SendAsync("ReceiveUnreadNotificationCount", userId, result);
         }
 
-        public override async Task OnConnectedAsync()
-        {
-            Console.WriteLine(Context.ConnectionId);
-            await base.OnConnectedAsync();
-        }
-
-        public override async Task OnDisconnectedAsync(Exception ex)
-        {
-            Console.WriteLine(Context.ConnectionId);
-            await base.OnDisconnectedAsync(ex);
-        }
     }
 
 }

@@ -76,7 +76,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public person: LKPerson = {
     personId: 1,
-    personExternalId: 'e38d630d-5630-4ada-8834-883e87c8ae08',
+    // personExternalId: 'e38d630d-5630-4ada-8834-883e87c8ae08',
+    personExternalId: '00000001-0000-0000-0000-000000000001',
     fullName: 'Иванов Иван Иванович',
     firstName: 'Иван',
     lastName: 'Иванов',

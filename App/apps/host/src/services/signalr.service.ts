@@ -13,7 +13,6 @@ export class SignalRService {
 //   newNotifications$ = this.newNotificationsSource.asObservable();
   unreadCount$ = this.unreadCountSource.asObservable();
 
-  //header
   constructor() {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:8080/notification-hub'
@@ -29,12 +28,12 @@ export class SignalRService {
   startConnection = () => 
   {
     this.hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl('https://localhost:8080/notification-hub', {
+        .withUrl('http://localhost:8080/notification-hub', {
           skipNegotiation: true,
           transport: signalR.HttpTransportType.WebSockets
         })
         .build()
-    
+
     this.hubConnection
     .start()
     .then(() => 
@@ -46,11 +45,18 @@ export class SignalRService {
 
   askServer(guid: string) {
     this.hubConnection.invoke('SendUnreadNotificationCount', guid);
+    //this.hubConnection.invoke('SendNewNotifications', guid);
   }
 
   askServerListener() {
-    this.hubConnection.on('ReceiveUnreadNotificationCount', (someText) => {
-        console.log(someText)
+    this.hubConnection.on('ReceiveUnreadNotificationCount', (userGuid, count) => {
+      console.log('UNREAD:' + userGuid)
+      console.log('UNREAD:' + count)
+    })
+
+    this.hubConnection.on('ReceiveNewNotifications', (userGuid, count) => {
+      console.log('NEWNOT:' + userGuid)
+      console.log('NEWNOT:' + count)
     })
   }
 

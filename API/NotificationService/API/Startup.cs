@@ -31,7 +31,7 @@ namespace API
                 .AddRabbitMQService();
         }
 
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +52,8 @@ namespace API
                 endpoints.MapHub<NotificationHub>("/notification-hub");
             });
 
+            lifetime.ApplicationStarted.Register(() => RegisterSignalRWithRabbitMQ(app.ApplicationServices));
+
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -66,6 +68,13 @@ namespace API
                     serviceScope.ServiceProvider.GetService<IRepository<Service>>()
                 );
             }
+        }
+
+        public void RegisterSignalRWithRabbitMQ(IServiceProvider serviceProvider)
+        {
+            // Connect to RabbitMQ
+            var rabbitMQService = (IRabbitMqListener)serviceProvider.GetService(typeof(IRabbitMqListener));
+            rabbitMQService.Connect();
         }
     }
 }

@@ -91,6 +91,9 @@ namespace API.Extensions
                 options.EnableDetailedErrors = true;
             });
 
+            //services.AddScoped<RabbitMqListener>();
+            services.AddSingleton<IRabbitMqListener, RabbitMqListener>();
+
             services.AddControllers();
 
             return services;
