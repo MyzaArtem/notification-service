@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import {Observable, Subject, BehaviorSubject} from "rxjs";
+import { MyNotification } from '../models/home/myNotification.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
   hubConnection: signalR.HubConnection;
-//   private newNotificationsSource = new BehaviorSubject<MyNotification[]>([]);
+  newNotificationsSource = new BehaviorSubject<string>("");
   private unreadCountSource = new BehaviorSubject<number>(0);
 
-//   newNotifications$ = this.newNotificationsSource.asObservable();
+  newNotifications$ = this.newNotificationsSource.asObservable();
   unreadCount$ = this.unreadCountSource.asObservable();
 
   constructor() {
@@ -54,9 +55,20 @@ export class SignalRService {
       console.log('UNREAD:' + count)
     })
 
-    this.hubConnection.on('ReceiveNewNotifications', (count) => {
+    this.hubConnection.on('ReceiveNewNotifications', (notifications) => {
       // console.log('NEWNOT:' + userGuid)
-      console.log('NEWNOT:' + count)
+      console.log('NEWNOT:' + notifications)
+      this.newNotificationsSource.next(notifications);
+    })
+
+    this.hubConnection.on('ReceiveServices', (count) => {
+      // console.log('NEWNOT:' + userGuid)
+      console.log('SERVICES:' + count)
+    })
+
+    this.hubConnection.on('ReceiveUsers', (count) => {
+      // console.log('NEWNOT:' + userGuid)
+      console.log('USERS:' + count)
     })
   }
 

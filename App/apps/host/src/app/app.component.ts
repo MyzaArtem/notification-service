@@ -21,6 +21,8 @@ import {PublicationsBadgeService} from 'common';
 import {SummCommentsStatusesService} from 'common';
 import {environment} from '../environments/environment';
 import { SignalRService } from '../services/signalr.service';
+import { NotificationService } from "@progress/kendo-angular-notification";
+import { MyNotification } from '../models/home/myNotification.model';
 //import {NotificationDialogComponent} from './notification-dialog/notification-dialog.component';
 
 const menuExpanded = 'menuExpanded';
@@ -129,7 +131,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private personService: PersonService,
     private summCommentsStatusesService: SummCommentsStatusesService,
 
-    public signalrService: SignalRService
+    public signalrService: SignalRService,
+    private notificationBudge: NotificationService
   ) {
     this.routesData = this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -235,13 +238,21 @@ export class AppComponent implements OnInit, OnDestroy {
       this.signalrService.askServerListener();
     }, 2000);
 
-    // setInterval(() => {
-    //   this.executePeriodicTask();
-    // }, 3000);
+    this.signalrService.newNotifications$.subscribe(notifications => {
+      console.log(notifications)
+      console.log(JSON.parse(notifications).UserId)
+      if (notifications.length > 0) {
+        this.show(JSON.parse(notifications));
+      }
+    });
   }
 
-  executePeriodicTask() {
-    this.signalrService.askServer(this.person.personExternalId);    
+  show(notification: MyNotification): void {
+    this.notificationBudge.show({
+      content: 'Пришло сообщение от сервиса с id: ' + notification.ServiceId,
+      closable: true,
+      type: { style: "info", icon: true }
+    });
   }
 
   public getCurrentPerson() {

@@ -311,6 +311,7 @@
   border-radius: 50%;
   background-image: url("../../assets/horse.jpg");
   margin: 0 10px 0 0;
+  flex-shrink: 0;
 }
 
 /* Styles for .message-data */
