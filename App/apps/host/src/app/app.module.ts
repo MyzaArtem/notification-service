@@ -18,6 +18,7 @@ import {LoginpageComponent} from './auth/loginpage.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {PlaceholderComponent} from './placeholder/placeholder';
 import {NotificationDialogComponent} from './notification-dialog/notification-dialog.component';
+import {CustomDatePipe} from './custom-date.pipe';
 
 registerLocaleData(localeRu);
 
@@ -28,6 +29,7 @@ registerLocaleData(localeRu);
     LoginpageComponent,
     PlaceholderComponent,
     NotificationDialogComponent,
+    CustomDatePipe,
   ],
   imports: [
     HttpClientModule,
