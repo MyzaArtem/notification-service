@@ -20,10 +20,12 @@
       <p *ngIf="people.length === 0">Нет отправителей</p>
       <div class="senders-list">
         <div *ngFor="let person of people" class="sender">
-          <div class="avatar"></div>
-          <div class="tittle-and-message">
-            <div class="tittle">{{ person.name }}</div>
-            <div class="last-message">Сообщение от {{ person.name }}</div>
+          <div class="avatar-and-text">
+            <div class="avatar"></div>
+            <div class="tittle-and-message">
+              <div class="tittle">{{ person.name }}</div>
+              <div class="last-message">Сообщение от {{ person.name }}фывфвыфвыфвыфвфывфывфывфывфывфывывфывфывыф</div>
+            </div>
           </div>
           <div class="data-and-count">
             <div class="data">пт</div>
@@ -39,9 +41,11 @@
           <div class="message-avatar"></div>
           <div class="message-data">
             <div class="message-sender">{{ message.from }}</div>
-            <div class="message-text">{{ message.text }}</div>
+            <div class="message-container">
+              <div class="message-text">{{ message.text }}</div>
+              <div class="message-date">{{ message.timestamp | customDate }}</div>
+            </div>
           </div>
-          <div class="message-date">{{ message.timestamp | date:'dd.MM.yyyy' }}</div>
         </div>
       </div>
       <div class="messages-footer">Вы прочитали все сообщения</div>

@@ -2,13 +2,15 @@
 
 /* Styles for .window */
 .window {
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
-  width: 100vw;
+  width: 100%;
   height: auto;
+  overflow: hidden;
 }
 
 /* Styles for .header */
@@ -27,7 +29,7 @@
 .text {
   color: #FFF;
   font-feature-settings: 'clig' off, 'liga' off;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -100,7 +102,7 @@
   background-color: #DEE2E6;
   border: none;
   color: black;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -177,26 +179,32 @@
 /* Styles for .senders-list */
 .senders-list {
   width: 400px;
-  height: 100%;
-  overflow-y: scroll;
+  height: 850px;
+  overflow-y: auto;
   overflow-x: hidden;
   background-color: white;
-  padding-right: 15px;
 }
 
 /* Styles for .sender */
 .sender {
   margin: 5px;
-  width: auto;
   height: 74px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border: none;
+  padding: 0 5px;
 }
 
 .sender:hover {
   background-color: lightblue;
+}
+
+.avatar-and-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 340px;
 }
 
 /* Styles for .avatar */
@@ -211,9 +219,26 @@
 .tittle-and-message {
   display: flex;
   flex-direction: column;
-  width: 257px;
+  width: auto;
   height: 64px;
   justify-content: start;
+  margin: 0 0 0 10px;
+  max-width: 50%;
+}
+
+.tittle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.last-message {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  word-wrap: break-word;
+  color: var(--kendo-color-base);
+  overflow: hidden;
+  height: 30px;
 }
 
 /* Styles for .data-and-count */
@@ -224,24 +249,48 @@
   flex-direction: column;
 }
 
+.data {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.count {
+  border-radius: 50%;
+  background-color: #2192CE;
+  color: white;
+  padding: 2px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Styles for .messages */
 .messages {
   background-color: white;
-  height: 790px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
   display: flex;
   flex-direction: column;
-
+  justify-content: flex-end;
+  height: 100%;
 }
 
 /* Styles for .messages-container */
 .messages-container {
-  height: auto;
-  width: 100%;
-  min-width: 360px;
-  padding-right: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+}
+
+.message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Styles for .message */
@@ -262,8 +311,6 @@
   border-radius: 50%;
   background-image: url("../../assets/horse.jpg");
   margin: 0 10px 0 0;
-  background-size: cover;
-  flex-shrink: 0;
 }
 
 /* Styles for .message-data */
@@ -281,19 +328,34 @@
   padding: 10px;
   max-width: 1250px;
   color: black;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.message-sender {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
 }
 
 /* Styles for .messages-footer */
 .messages-footer {
+  position: fixed;
   height: 70px;
-  width: 100%;
+  width: 1520px;
+  top: 95%;
   text-align: center;
   justify-content: center;
-  min-width: 360px;
 }
 
 /* Styles for .message-date */
 .message-date {
   font-size: 12px;
   color: #999999;
+  display: flex;
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
 }
