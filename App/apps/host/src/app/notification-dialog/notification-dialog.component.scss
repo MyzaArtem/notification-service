@@ -2,13 +2,15 @@
 
 /* Styles for .window */
 .window {
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
-  width: 100vw;
+  width: 100%;
   height: auto;
+  overflow: hidden;
 }
 
 /* Styles for .header */
@@ -27,7 +29,7 @@
 .text {
   color: #FFF;
   font-feature-settings: 'clig' off, 'liga' off;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -100,7 +102,7 @@
   background-color: #DEE2E6;
   border: none;
   color: black;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -178,7 +180,7 @@
 .senders-list {
   width: 400px;
   height: 850px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   background-color: white;
 }
@@ -186,7 +188,6 @@
 /* Styles for .sender */
 .sender {
   margin: 5px;
-  width: 384px;
   height: 74px;
   display: flex;
   justify-content: space-between;
@@ -196,6 +197,12 @@
 
 .sender:hover {
   background-color: lightblue;
+}
+
+.avatar-and-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 /* Styles for .avatar */
@@ -210,9 +217,22 @@
 .tittle-and-message {
   display: flex;
   flex-direction: column;
-  width: 257px;
+  width: auto;
   height: 64px;
   justify-content: start;
+  margin: 0 0 0 10px;
+}
+
+.tittle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+
+.last-message {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
 }
 
 /* Styles for .data-and-count */
@@ -223,21 +243,42 @@
   flex-direction: column;
 }
 
+.data {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.count {
+  border-radius: 50%;
+  background-color: #2192CE;
+  color: white;
+  padding: 2px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Styles for .messages */
 .messages {
   background-color: white;
-  height: 950px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
-  width: 1520px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
 }
 
 /* Styles for .messages-container */
 .messages-container {
-  height: 880px;
-  width: 1520px;
+  display: flex;
+  flex-direction: column;
+  height: 95%;
 }
 
 /* Styles for .message */
@@ -279,8 +320,10 @@
 
 /* Styles for .messages-footer */
 .messages-footer {
+  position: fixed;
   height: 70px;
   width: 1520px;
+  top: 95%;
   text-align: center;
   justify-content: center;
 }

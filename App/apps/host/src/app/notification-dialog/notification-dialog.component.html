@@ -20,10 +20,12 @@
       <p *ngIf="people.length === 0">Нет отправителей</p>
       <div class="senders-list">
         <div *ngFor="let person of people" class="sender">
-          <div class="avatar"></div>
-          <div class="tittle-and-message">
-            <div class="tittle">{{ person.name }}</div>
-            <div class="last-message">Сообщение от {{ person.name }}</div>
+          <div class="avatar-and-text">
+            <div class="avatar"></div>
+            <div class="tittle-and-message">
+              <div class="tittle">{{ person.name }}</div>
+              <div class="last-message">Сообщение от {{ person.name }}</div>
+            </div>
           </div>
           <div class="data-and-count">
             <div class="data">пт</div>
