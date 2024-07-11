@@ -234,6 +234,14 @@ export class AppComponent implements OnInit, OnDestroy {
       this.signalrService.askServer(this.person.personExternalId);
       this.signalrService.askServerListener();
     }, 2000);
+
+    // setInterval(() => {
+    //   this.executePeriodicTask();
+    // }, 3000);
+  }
+
+  executePeriodicTask() {
+    this.signalrService.askServer(this.person.personExternalId);    
   }
 
   public getCurrentPerson() {

@@ -25,14 +25,14 @@ namespace API.Hubs
         /*public async Task SendNewNotifications(NotificationCreateDto notificationCreateDto)
         {
             string json = JsonConvert.SerializeObject(notificationCreateDto);
-            await Clients.Clients(Context.ConnectionId).SendAsync("ReceiveNewNotifications", notificationCreateDto.UserId.ToString(), json);
+            await Clients.Client(Context.ConnectionId).SendAsync("ReceiveNewNotifications", notificationCreateDto.UserId.ToString(), json);
         }*/
 
         /*public async Task SendNewNotifications(string userId)
         {
             var notifications = new List<string> { "Notification 1", "Notification 2", "Notification 3" };
             string json = JsonConvert.SerializeObject(notifications);
-            await Clients.Clients(Context.ConnectionId).SendAsync("ReceiveNewNotifications", userId, json);
+            await Clients.Client(Context.ConnectionId).SendAsync("ReceiveNewNotifications", userId, json);
         }*/
 
         public async Task SendUnreadNotificationCount(string userId)
@@ -59,7 +59,7 @@ namespace API.Hubs
                 _logger.LogError($"Internal server error: {ex.Message}", ex.Message);
                 return;
             }
-            await Clients.Clients(Context.ConnectionId).SendAsync("ReceiveUnreadNotificationCount", userId, result);
+            await Clients.Client(Context.ConnectionId).SendAsync("ReceiveUnreadNotificationCount", userId, result);
         }
 
     }

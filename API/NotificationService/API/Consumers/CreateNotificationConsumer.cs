@@ -3,18 +3,26 @@ using MassTransit;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using System;
+using Newtonsoft.Json;
+using Application.DTOs;
 
-namespace Infrastructure.Consumers;
+namespace API.Hubs;
 
 public class CreateNotificationConsumer : IConsumer<Notification>
 {
     private readonly ILogger<CreateNotificationConsumer> _logger;
     private readonly IMediator _mediator;
 
-    public CreateNotificationConsumer(ILogger<CreateNotificationConsumer> logger, IMediator mediator)
+    protected readonly IServiceProvider _serviceProvider;
+
+    public CreateNotificationConsumer(ILogger<CreateNotificationConsumer> logger, IMediator mediator, IServiceProvider serviceProvider)
     {
         _logger = logger;
         _mediator = mediator;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task Consume(ConsumeContext<Notification> context)
@@ -36,7 +44,24 @@ public class CreateNotificationConsumer : IConsumer<Notification>
             _logger.LogInformation("Получение уведомления из очереди");
             
             var notificationReadDto = await _mediator.Send(new CreateNotificationCommand(context.Message));
-            
+
+            var chatHub = (IHubContext<NotificationHub>)_serviceProvider.GetService(typeof(IHubContext<NotificationHub>));
+
+            Notification a = new Notification();
+
+            a.UserId = context.Message.UserId;
+            a.ServiceId = context.Message.ServiceId;
+            a.NotificationTypeId = context.Message.NotificationTypeId;
+            a.NotificationCategoryId = context.Message.NotificationCategoryId;
+            a.Title = context.Message.Title;
+            a.Message = context.Message.Message;
+            a.CreatedAt = context.Message.CreatedAt;
+            a.Status = context.Message.Status;
+
+            var temp = JsonConvert.SerializeObject(a);
+
+            chatHub.Clients.All.SendAsync("ReceiveNewNotifications", temp);
+
             await context.NotifyConsumed(TimeSpan.FromSeconds(1), nameof(CreateNotificationConsumer));
         }
         catch (Exception ex)

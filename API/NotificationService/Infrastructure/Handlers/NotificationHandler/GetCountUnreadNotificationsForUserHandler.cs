@@ -20,6 +20,6 @@ namespace Infrastructure.Handlers.NotificationHandler
             _appDbContext = appDbContext;
         }
         public async Task<int> Handle(GetCountUnreadNotificationsForUserQuery request, CancellationToken cancellationToken)
-            => await _appDbContext.Notifications.Where(n => n.UserId == request.UserID && n.Status != (short)Status.Deleted).CountAsync();
+            => await _appDbContext.Notifications.Where(n => n.UserId == request.UserID && n.ReadAt == null).CountAsync();
     }
 }

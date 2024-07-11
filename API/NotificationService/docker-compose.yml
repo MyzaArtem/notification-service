@@ -31,15 +31,7 @@ services:
       - dockerapi
 
 
-  lk-person:
-    container_name: lk-person
-    build:
-      context: ../../App/
-      dockerfile: /Dockerfile
-    ports:
-      - "8451:80"
-    networks:
-      - dockerapi
+  
 
   rabbitmq:
     image: rabbitmq:3-management

@@ -9,7 +9,7 @@ using MediatR;
 using System;
 using AutoMapper;
 using MassTransit;
-using Infrastructure.Consumers;
+using API.Hubs;
 
 namespace API.Extensions
 {
@@ -92,7 +92,7 @@ namespace API.Extensions
             });
 
             //services.AddScoped<RabbitMqListener>();
-            services.AddSingleton<IRabbitMqListener, RabbitMqListener>();
+            //services.AddSingleton<IRabbitMqListener, RabbitMqListener>();
 
             services.AddControllers();
 

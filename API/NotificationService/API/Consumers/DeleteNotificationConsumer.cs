@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.DTOs;
 
-namespace Infrastructure.Consumers;
+namespace API.Hubs;
 
 public class DeleteNotificationConsumer : IConsumer<DeleteNotificationDto>
 {

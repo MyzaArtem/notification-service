@@ -50,12 +50,12 @@ export class SignalRService {
 
   askServerListener() {
     this.hubConnection.on('ReceiveUnreadNotificationCount', (userGuid, count) => {
-      console.log('UNREAD:' + userGuid)
+      // console.log('UNREAD:' + userGuid)
       console.log('UNREAD:' + count)
     })
 
-    this.hubConnection.on('ReceiveNewNotifications', (userGuid, count) => {
-      console.log('NEWNOT:' + userGuid)
+    this.hubConnection.on('ReceiveNewNotifications', (count) => {
+      // console.log('NEWNOT:' + userGuid)
       console.log('NEWNOT:' + count)
     })
   }

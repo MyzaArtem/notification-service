@@ -4,7 +4,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Consumers;
+namespace API.Hubs;
 
 public class ServiceConsumer : IConsumer<Service>
 {

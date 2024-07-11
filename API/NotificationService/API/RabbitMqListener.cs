@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace API
 {
-    public class RabbitMqListener : IRabbitMqListener
+    /*public class RabbitMqListener : IRabbitMqListener
     {
         protected readonly ConnectionFactory _factory;
         protected readonly IConnection _connection;
@@ -38,6 +38,8 @@ namespace API
             };
 
             _channel.BasicConsume(queue: "CreateQueue", autoAck: true, consumer: consumer);
+
+            Console.WriteLine("Connect subscribe on CreateQueue");
         }
-    }
+    }*/
 }

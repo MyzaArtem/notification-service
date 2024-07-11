@@ -2,7 +2,6 @@
 using API.Hubs;
 using Application.Interfaces;
 using Domain.Models;
-using Infrastructure.Consumers;
 using Infrastructure.Data;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +30,7 @@ namespace API
                 .AddRabbitMQService();
         }
 
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, IHostApplicationLifetime lifetime*/)
         {
             if (env.IsDevelopment())
             {
@@ -52,7 +51,7 @@ namespace API
                 endpoints.MapHub<NotificationHub>("/notification-hub");
             });
 
-            lifetime.ApplicationStarted.Register(() => RegisterSignalRWithRabbitMQ(app.ApplicationServices));
+            //lifetime.ApplicationStarted.Register(() => RegisterSignalRWithRabbitMQ(app.ApplicationServices));
 
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
@@ -70,11 +69,11 @@ namespace API
             }
         }
 
-        public void RegisterSignalRWithRabbitMQ(IServiceProvider serviceProvider)
+        /*public void RegisterSignalRWithRabbitMQ(IServiceProvider serviceProvider)
         {
             // Connect to RabbitMQ
             var rabbitMQService = (IRabbitMqListener)serviceProvider.GetService(typeof(IRabbitMqListener));
             rabbitMQService.Connect();
-        }
+        }*/
     }
 }
